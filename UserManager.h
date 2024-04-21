@@ -1,4 +1,6 @@
 #pragma once
+#include <optional>
+#include <string>
 #include <vector>
 
 #include "User.h"
@@ -16,12 +18,15 @@ namespace fileSystem
 
   public:
     UserManager();
-    void authenticate();
+    [[nodiscard]] std::optional<const User*> authenticate() const;
     void registerUser();
     [[nodiscard]] bool usernameExists(std::string_view username) const;
+    [[nodiscard]] std::optional<const User*> getUser(std::string_view username) const;
 
   private:
     void loadUsers();
-    [[nodiscard]] User getUser();
+    [[nodiscard]] std::optional<User> createUser() const;
+    [[nodiscard]] std::optional<std::string> getUsername() const;
+    [[nodiscard]] std::optional<std::string> getPassword() const;
   };
 } // namespace fileSystem

@@ -1,4 +1,6 @@
 #include <algorithm>
+#include <iostream>
+#include <optional>
 
 #include "Utils.h"
 
@@ -22,5 +24,68 @@ namespace fileSystem
     {
       return std::isalpha(c);
     });
+  }
+
+  std::optional<int> Utils::getNumber()
+  {
+    int number;
+    std::cin >> number;
+
+    char nextChar;
+    while (std::cin.get(nextChar))
+    {
+      if (nextChar == '\n') break;
+      if (!isspace(nextChar))
+      {
+        std::cin.setstate(std::ios_base::failbit);
+        break;
+      }
+    }
+
+    if (std::cin.fail())
+    {
+      std::cin.clear();
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+      std::cout << "Invalid input. Please enter a number.\n";
+      return {};
+    }
+    return { number };
+  }
+
+  std::optional<std::string> Utils::getLine()
+  {
+    std::string buff{};
+    std::getline(std::cin, buff);
+
+    if (std::cin.fail())
+    {
+      std::cin.clear();
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+      std::clog << "ERROR: Utils::getLine() \n\n";
+      return {};
+    }
+    return { buff };
+  }
+
+  void Utils::bufferSafetyCheck()
+  {
+    if (std::cin.rdbuf()->in_avail() > 0)
+    {
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+      std::clog << "ERROR: Utils::bufferSafetyCheck() \n\n";
+    }
+  }
+
+  bool Utils::promptToExitLoop()
+  {
+    std::cout << "Do you want to cancel this operation? (y/N): ";
+    std::string buff;
+    std::getline(std::cin, buff);
+
+    if (buff == "y" || buff == "Y")
+    {
+      return true;
+    }
+    return false;
   }
 } // namespace fileSystem
