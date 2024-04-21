@@ -143,6 +143,7 @@
     <ClCompile Include="Tokenizer.cpp" />
     <ClCompile Include="User.cpp" />
     <ClCompile Include="UserManager.cpp" />
+    <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Command.h" />
@@ -160,6 +161,7 @@
     <ClInclude Include="Tokenizer.h" />
     <ClInclude Include="User.h" />
     <ClInclude Include="UserManager.h" />
+    <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />

@@ -4,18 +4,17 @@
 #include "FileSystemManager.h"
 #include "Flags.h"
 
-[[nodiscard]] int getUserInput();
-
 
 namespace fileSystem
 {
+  [[nodiscard]] int getAction();
 
   void FileSystemManager::run()
   {
     auto currentAppState = AppState::running;
     while (currentAppState == AppState::running)
     {
-      switch (getUserInput())
+      switch (getAction())
       {
       case 1:
         this->m_userManager.authenticate();
@@ -31,65 +30,64 @@ namespace fileSystem
       }
     }
   }
-} // namespace fileSystem
 
-
-[[nodiscard]] int getUserInput()
-{
-  int choice{};
-  bool isValid{ false };
-
-  while (!isValid)
+  [[nodiscard]] int getAction()
   {
-    std::cout << "Please choose an option:\n";
-    std::cout << "1 - Choose user (default)\n";
-    std::cout << "2 - Create new user\n";
-    std::cout << "3 - Exit\n";
-    std::cout << "> ";
-    std::cin >> choice;
+    int choice{};
+    bool isValid{ false };
 
-    char nextChar;
-    while (std::cin.get(nextChar))
+    while (!isValid)
     {
-      if (nextChar == '\n') break;
-      if (!isspace(nextChar))
+      std::cout << "Please choose an option:\n"
+        << "1 - Choose user (default)\n"
+        << "2 - Create new user\n"
+        << "3 - Exit\n"
+        << "> ";
+      std::cin >> choice;
+
+      char nextChar;
+      while (std::cin.get(nextChar))
       {
-        std::cin.setstate(std::ios_base::failbit);
-        break;
+        if (nextChar == '\n') break;
+        if (!isspace(nextChar))
+        {
+          std::cin.setstate(std::ios_base::failbit);
+          break;
+        }
+      }
+
+      if (std::cin.fail())
+      {
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cout << "Invalid input. Please enter a number.\n";
+      }
+      else
+      {
+        switch (choice)
+        {
+        case 1:
+          std::cout << "Choose user selected.\n";
+          isValid = true;
+          break;
+        case 2:
+          std::cout << "Create user selected.\n";
+          isValid = true;
+          break;
+        case 3:
+          std::cout << "Exit selected. Goodbye!\n";
+          isValid = true;
+          break;
+        default:
+          std::cout << "Invalid choice. Please try again.\n";
+        }
       }
     }
-
-    if (std::cin.fail())
+    if (std::cin.rdbuf()->in_avail() > 0)
     {
-      std::cin.clear();
       std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-      std::cout << "Invalid input. Please enter a number.\n";
+      std::clog << "Ignoring input: FileSystemManager.cpp GetUserInput()\n\n"; // TODO(pablo)
     }
-    else
-    {
-      switch (choice)
-      {
-      case 1:
-        std::cout << "Choose user selected.\n";
-        isValid = true;
-        break;
-      case 2:
-        std::cout << "Create user selected.\n";
-        isValid = true;
-        break;
-      case 3:
-        std::cout << "Exit selected. Goodbye!\n";
-        isValid = true;
-        break;
-      default:
-        std::cout << "Invalid choice. Please try again.\n";
-      }
-    }
+    return choice;
   }
-  if (std::cin.rdbuf()->in_avail() > 0)
-  {
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    std::clog << "Ignoring input : FileSystemManager.cpp GetUserInput()\n\n"; // TODO(pablo)
-  }
-  return choice;
-}
+} // namespace fileSystem
