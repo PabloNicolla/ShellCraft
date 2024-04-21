@@ -136,7 +136,6 @@
     <ClCompile Include="FileSystemEnv.cpp" />
     <ClCompile Include="FileSystemManager.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Metadata.cpp" />
     <ClCompile Include="PathResolver.cpp" />
     <ClCompile Include="PermissionManager.cpp" />
     <ClCompile Include="SystemObject.cpp" />
@@ -154,7 +153,6 @@
     <ClInclude Include="FileSystemEnv.h" />
     <ClInclude Include="FileSystemManager.h" />
     <ClInclude Include="Flags.h" />
-    <ClInclude Include="Metadata.h" />
     <ClInclude Include="PathResolver.h" />
     <ClInclude Include="PermissionManager.h" />
     <ClInclude Include="SystemObject.h" />
