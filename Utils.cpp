@@ -4,7 +4,7 @@
 
 #include "Utils.h"
 
-namespace fileSystem
+namespace fs
 {
   std::string Utils::trim(const std::string& str, const std::string& whitespace)
   {
@@ -88,4 +88,14 @@ namespace fileSystem
     }
     return false;
   }
-} // namespace fileSystem
+
+  bool Utils::checkIfDirectoryExists(const std::filesystem::path& dir)
+  {
+    return std::filesystem::exists(dir);
+  }
+
+  bool Utils::createDirectory(const std::filesystem::path& dir)
+  {
+    return std::filesystem::create_directory(dir);
+  }
+} // namespace fs

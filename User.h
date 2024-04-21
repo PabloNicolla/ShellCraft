@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 
-namespace fileSystem
+namespace fs
 {
   class User
   {
@@ -14,4 +14,4 @@ namespace fileSystem
     [[nodiscard]] const std::string& getPassword() const;
     void setPassword(const std::string& password);
   };
-} // namespace fileSystem
+} // namespace fs

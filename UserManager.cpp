@@ -5,7 +5,7 @@
 #include "UserManager.h"
 #include "Utils.h"
 
-namespace fileSystem
+namespace fs
 {
   UserManager::UserManager()
   {
@@ -171,4 +171,4 @@ namespace fileSystem
     Utils::bufferSafetyCheck();
     return { password };
   }
-} // namespace fileSystem
+} // namespace fs

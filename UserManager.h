@@ -5,7 +5,7 @@
 
 #include "User.h"
 
-namespace fileSystem
+namespace fs
 {
   constexpr int c_maxUsernameLength{ 25 };
   constexpr int c_minUsernameLength{ 3 };
@@ -29,4 +29,4 @@ namespace fileSystem
     [[nodiscard]] std::optional<std::string> getUsername() const;
     [[nodiscard]] std::optional<std::string> getPassword() const;
   };
-} // namespace fileSystem
+} // namespace fs

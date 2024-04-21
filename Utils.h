@@ -1,8 +1,9 @@
 #pragma once
+#include <filesystem>
 #include <optional>
 #include <string>
 
-namespace fileSystem
+namespace fs
 {
   class Utils
   {
@@ -23,5 +24,7 @@ namespace fileSystem
     [[nodiscard]] std::optional<std::string> static getLine();
     void static bufferSafetyCheck();
     [[nodiscard]] bool static promptToExitLoop();
+    [[nodiscard]] bool static checkIfDirectoryExists(const std::filesystem::path& dir);
+    [[nodiscard]] bool static createDirectory(const std::filesystem::path& dir);
   };
-} // namespace fileSystem
+} // namespace fs

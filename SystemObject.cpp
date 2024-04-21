@@ -1,5 +1,5 @@
 #include "SystemObject.h"
 
-namespace fileSystem
+namespace fs
 {
-} // namespace fileSystem
+} // namespace fs

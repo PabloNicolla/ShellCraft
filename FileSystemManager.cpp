@@ -1,13 +1,13 @@
-#include <iomanip>
 #include <iostream>
-#include <limits>
 #include "FileSystemManager.h"
 #include "Flags.h"
 #include "Utils.h"
 
 
-namespace fileSystem
+namespace fs
 {
+  enum Action { authenticate, registerUser, exit };
+
   [[nodiscard]] int getAction();
 
   void FileSystemManager::run()
@@ -17,18 +17,19 @@ namespace fileSystem
     {
       switch (getAction())
       {
-      case 1:
+      case authenticate:
         {
           if (const auto user = m_userManager.authenticate())
           {
-            //
+            m_environments.emplace_back(user.value());
+            startFileSystem();
           }
         }
         break;
-      case 2:
+      case registerUser:
         m_userManager.registerUser();
         break;
-      case 3:
+      case exit:
         currentAppState = AppState::exiting;
         break;
       default:
@@ -37,46 +38,61 @@ namespace fileSystem
     }
   }
 
+  void FileSystemManager::startFileSystem()
+  {
+    if (!Utils::checkIfDirectoryExists("./fs"))
+    {
+      if (!Utils::createDirectory("./fs"))
+      {
+        std::clog << "ERROR: failed to create fs directory" << std::endl;  // NOLINT(performance-avoid-endl)
+        std::terminate();
+      }
+    }
+    if (!Utils::checkIfDirectoryExists("./fs/home"))
+    {
+      if (!Utils::createDirectory("./fs/home"))
+      {
+        std::clog << "ERROR: failed to create home directory" << std::endl;  // NOLINT(performance-avoid-endl)
+        std::terminate();
+      }
+    }
+    auto& mainEnv = m_environments[0];
+    mainEnv.loadUserEnv();
+  }
+
   [[nodiscard]] int getAction()
   {
-    std::optional<int> choice;
+    int choice{ -1 };
     bool isValid{ false };
 
     while (!isValid)
     {
       std::cout << "Please choose an option:\n"
-        << "1 - Choose user (default)\n"
+        << "1 - Choose user\n"
         << "2 - Create new user\n"
         << "3 - Exit\n"
         << "> ";
 
-      choice = Utils::getNumber();
+      choice = Utils::getNumber().value_or(-1) - 1;
 
-      if (choice)
+      isValid = true;
+      switch (choice)
       {
-        isValid = true;
-        switch (choice.value())
-        {
-        case 1:
-          std::cout << "Choose user selected.\n";
-          break;
-        case 2:
-          std::cout << "Create user selected.\n";
-          break;
-        case 3:
-          std::cout << "Exit selected. Goodbye!\n";
-          break;
-        default:
-          isValid = false;
-          std::cout << "Invalid choice. Please try again.\n";
-        }
+      case authenticate:
+        std::cout << "Choose user selected.\n";
+        break;
+      case registerUser:
+        std::cout << "Create user selected.\n";
+        break;
+      case exit:
+        std::cout << "Exit selected. Goodbye!\n";
+        break;
+      default:
+        isValid = false;
+        std::cout << "Invalid choice. Please try again.\n";
       }
     }
-    if (std::cin.rdbuf()->in_avail() > 0)
-    {
-      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-      std::clog << "Ignoring input: FileSystemManager.cpp GetUserInput()\n\n"; // TODO(pablo)
-    }
-    return choice.value();
+    Utils::bufferSafetyCheck();
+    return choice;
   }
-} // namespace fileSystem
+} // namespace fs

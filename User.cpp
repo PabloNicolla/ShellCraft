@@ -1,6 +1,6 @@
 #include "User.h"
 
-namespace fileSystem
+namespace fs
 {
   User::User(std::string username, std::string password) :
     m_username{ std::move(username) }, m_password{ std::move(password) }
@@ -21,4 +21,4 @@ namespace fileSystem
   {
     m_password = password;
   }
-} // namespace fileSystem
+} // namespace fs

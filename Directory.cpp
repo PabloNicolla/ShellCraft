@@ -1,5 +1,5 @@
 #include "Directory.h"
 
-namespace fileSystem
+namespace fs
 {
-} // namespace fileSystem
+} // namespace fs

@@ -1,6 +1,6 @@
 #pragma once
 
-namespace fileSystem
+namespace fs
 {
   enum class AppState { running, exiting };
-} // namespace fileSystem
+} // namespace fs

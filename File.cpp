@@ -1,6 +1,6 @@
 #include "File.h"
 
-namespace fileSystem
+namespace fs
 {
   
-} // namespace fileSystem
+} // namespace fs

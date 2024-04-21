@@ -3,7 +3,7 @@
 #include <ctime>
 #include <string>
 
-namespace fileSystem
+namespace fs
 {
   class Metadata
   {
@@ -16,4 +16,4 @@ namespace fileSystem
     {
     }
   };
-} // namespace fileSystem
+} // namespace fs
