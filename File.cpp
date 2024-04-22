@@ -19,4 +19,9 @@ namespace fs
   {
     m_content = content;
   }
+
+  size_t File::getSize() const
+  {
+    return 1;
+  }
 } // namespace fs

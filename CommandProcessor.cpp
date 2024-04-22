@@ -2,4 +2,7 @@
 
 namespace shell
 {
+  void CommandProcessor::run()
+  {
+  }
 } // namespace shell

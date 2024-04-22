@@ -1,3 +1,5 @@
+#include <sstream>
+
 #include "SystemObject.h"
 
 namespace fs
@@ -75,5 +77,67 @@ namespace fs
   void SystemObject::setType(const SystemObjectType& type)
   {
     m_type = type;
+  }
+
+  std::ofstream& SystemObject::saveToFile(std::ofstream& ofs) const
+  {
+    ofs << static_cast<int>(m_type) << "|"
+      << m_name << "|"
+      << m_owner << "|"
+      << m_created << "|"
+      << m_modified << "|"
+      << m_parentPath << "|"
+      << m_size << "|"
+      << m_permissions;
+    return ofs;
+  }
+
+  std::ifstream& SystemObject::readFromFile(std::ifstream& ifs)
+  {
+    if (std::string line; std::getline(ifs, line))
+    {
+      std::istringstream iss(line);
+      std::string token;
+
+      // Read type
+      std::getline(iss, token, '|');
+      m_type = static_cast<SystemObjectType>(std::stoi(token));
+
+      // Read name
+      std::getline(iss, m_name, '|');
+
+      // Read owner
+      std::getline(iss, m_owner, '|');
+
+      // Read created
+      std::getline(iss, token, '|');
+      m_created = static_cast<std::time_t>(std::stol(token));
+
+      // Read modified
+      std::getline(iss, token, '|');
+      m_modified = static_cast<std::time_t>(std::stol(token));
+
+      // Read parentPath
+      std::getline(iss, m_parentPath, '|');
+
+      // Read size
+      std::getline(iss, token, '|');
+      m_size = std::stoull(token);
+
+      // Read permissions
+      std::getline(iss, token, '|');
+      m_permissions = std::stoi(token);
+    }
+    return ifs;
+  }
+
+  std::ifstream& operator>>(std::ifstream& ifs, SystemObject& so)
+  {
+    return so.readFromFile(ifs);
+  }
+
+  std::ofstream& operator<<(std::ofstream& ofs, const SystemObject& so)
+  {
+    return so.saveToFile(ofs);
   }
 } // namespace fs

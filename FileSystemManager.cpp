@@ -1,5 +1,7 @@
 #include <iostream>
 #include "FileSystemManager.h"
+
+#include "CommandProcessor.h"
 #include "Flags.h"
 #include "Utils.h"
 
@@ -58,6 +60,7 @@ namespace fs
     }
     auto& mainEnv = m_environments[0];
     mainEnv.loadUserEnv();
+    shell::CommandProcessor::run();
   }
 
   [[nodiscard]] int getAction()

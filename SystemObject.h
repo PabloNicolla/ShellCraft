@@ -1,6 +1,7 @@
 #pragma once
 #include <ctime>
 #include <string>
+#include <fstream>
 
 namespace fs
 {
@@ -35,5 +36,11 @@ namespace fs
     void setPermissions(int permissions);
     [[nodiscard]] SystemObjectType getType() const;
     void setType(const SystemObjectType& type);
+
+    std::ofstream& saveToFile(std::ofstream& ofs) const;
+    friend std::ofstream& operator<<(std::ofstream& ofs, const SystemObject& so);
+
+    std::ifstream& readFromFile(std::ifstream& ifs);
+    friend std::ifstream& operator>>(std::ifstream& ifs, SystemObject& so);
   };
 } // namespace fs

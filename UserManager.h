@@ -18,8 +18,11 @@ namespace fs
 
   public:
     UserManager();
+    ~UserManager();
+
     [[nodiscard]] std::optional<const User*> authenticate() const;
     void registerUser();
+    void saveUsers();
     [[nodiscard]] bool usernameExists(std::string_view username) const;
     [[nodiscard]] std::optional<const User*> getUser(std::string_view username) const;
 

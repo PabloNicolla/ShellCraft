@@ -12,6 +12,11 @@ namespace fs
     loadUsers();
   }
 
+  UserManager::~UserManager()
+  {
+    saveUsers();
+  }
+
   std::optional<const User*> UserManager::authenticate() const
   {
     while (true)
@@ -42,6 +47,10 @@ namespace fs
     {
       m_users.push_back(user.value());
     }
+  }
+
+  void UserManager::saveUsers()
+  {
   }
 
   bool UserManager::usernameExists(const std::string_view username) const

@@ -4,7 +4,7 @@
 
 namespace fs
 {
-  class File : public SystemObject
+  class File final : public SystemObject
   {
     std::string m_content;
 
@@ -12,5 +12,6 @@ namespace fs
     File(const User* user, const std::string& name, const std::string& parentPath);
     [[nodiscard]] const std::string& getContent() const;
     void setContent(const std::string& content);
+    [[nodiscard]] size_t getSize() const override;
   };
 } // namespace fs
