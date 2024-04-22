@@ -1,6 +1,7 @@
 #include <sstream>
 #include "SystemObject.h"
 
+
 namespace fs
 {
   const std::string& SystemObject::getName() const

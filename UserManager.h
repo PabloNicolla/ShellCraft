@@ -27,6 +27,7 @@ namespace fs
     void saveUsers();
     [[nodiscard]] bool usernameExists(std::string_view username) const;
     [[nodiscard]] std::optional<const User*> getUser(std::string_view username) const;
+    [[nodiscard]] bool requestPassword(const std::string& username) const;
 
   private:
     void loadUsers();

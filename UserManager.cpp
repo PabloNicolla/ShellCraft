@@ -32,11 +32,11 @@ namespace fs
         {
           return { foundUser.value() };
         }
-        std::cout << "Wrong password\n";
+        std::cout << "Wrong password\n\n";
       }
       else
       {
-        std::cout << "User with username: " << username.value() << " could not be found.\n";
+        std::cout << "User with username: " << username.value() << " could not be found.\n\n";
       }
     }
   }
@@ -85,6 +85,23 @@ namespace fs
     return &*userIt;
   }
 
+  bool UserManager::requestPassword(const std::string& username) const
+  {
+    if (const auto foundUser = getUser(username))
+    {
+      if (foundUser.value()->getPassword() == getPassword())
+      {
+        return true;
+      }
+      std::cout << "Wrong password\n";
+    }
+    else
+    {
+      std::cout << "User with username: " << username << " could not be found.\n";
+    }
+    return false;
+  }
+
   void UserManager::loadUsers()
   {
     if (Utils::checkIfDirectoryExists(c_userManagerPath))
@@ -114,7 +131,7 @@ namespace fs
       else if (usernameExists(userInput.value()))
       {
         std::cout << "Invalid username.\n"
-          << "Username is already in use\n";
+          << "Username is already in use\n\n";
       }
       else
       {
@@ -149,13 +166,13 @@ namespace fs
         username = Utils::trim(line.value());
         if (username.size() < c_minUsernameLength || username.size() >= c_maxUsernameLength)
         {
-          std::cout << "Invalid username.\n"
+          std::cout << "\nInvalid username.\n"
             << "Username cannot have less than " << 3 << " or more than "
             << c_maxUsernameLength << " characters" << "\n";
         }
         else if (!Utils::areAllCharactersAlpha(username))
         {
-          std::cout << "Invalid username.\n"
+          std::cout << "\nInvalid username.\n"
             << "Username must contain only valid characters\n";
         }
         else
@@ -165,8 +182,10 @@ namespace fs
       }
       if (!isValid && Utils::promptToExitLoop())
       {
+        std::cout << "\n";
         return {};
       }
+      std::cout << "\n";
     }
 
     Utils::bufferSafetyCheck();
@@ -192,7 +211,7 @@ namespace fs
         return {};
       }
     }
-
+    std::cout << "\n";
     Utils::bufferSafetyCheck();
     return { password };
   }

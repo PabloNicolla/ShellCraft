@@ -1,8 +1,6 @@
 #include <iostream>
 #include "FileSystemManager.h"
-
 #include "CommandProcessor.h"
-#include "Flags.h"
 #include "Utils.h"
 
 
@@ -24,7 +22,7 @@ namespace fs
           if (const auto user = m_userManager.authenticate())
           {
             m_environments.emplace_back(user.value());
-            startFileSystem();
+            currentAppState = startFileSystem();
           }
         }
         break;
@@ -40,12 +38,33 @@ namespace fs
     }
   }
 
-  void FileSystemManager::startFileSystem()
+  FileSystemEnv* FileSystemManager::getMainEnv()
+  {
+    if (!m_environments.empty())
+    {
+      return &m_environments.front();
+    }
+    return nullptr;
+  }
+
+  FileSystemEnv* FileSystemManager::getEnv(const std::string& user)
+  {
+    return nullptr; // TODO(pablo)
+  }
+
+  bool FileSystemManager::requestAuthentication(const std::string& user) const
+  {
+    return m_userManager.requestPassword(user);
+  }
+
+  AppState FileSystemManager::startFileSystem()
   {
     createEssentialFiles();
-    auto& mainEnv = m_environments[0];
-    mainEnv.loadUserEnv();
-    shell::CommandProcessor::run();
+    m_environments[0].loadUserEnv();
+    shell::CommandProcessor cp{ this };
+    const auto state = cp.run();
+    m_environments.clear();
+    return state;
   }
 
   [[nodiscard]] int getAction()
@@ -67,17 +86,17 @@ namespace fs
       switch (choice)
       {
       case authenticate:
-        std::cout << "Choose user selected.\n";
+        std::cout << "Choose user selected.\n\n";
         break;
       case registerUser:
-        std::cout << "Create user selected.\n";
+        std::cout << "Create user selected.\n\n";
         break;
       case exit:
-        std::cout << "Exit selected. Goodbye!\n";
+        std::cout << "Exit selected. Goodbye!\n\n";
         break;
       default:
         isValid = false;
-        std::cout << "Invalid choice. Please try again.\n";
+        std::cout << "Invalid choice. Please try again.\n\n";
       }
     }
     Utils::bufferSafetyCheck();

@@ -7,6 +7,7 @@
 #include "PathResolver.h"
 #include "Utils.h"
 
+
 namespace fs
 {
   const char* FileSystemEnv::m_usersHomePath{ "fs/home/" };
@@ -126,5 +127,10 @@ namespace fs
       return m_root.get();
     }
     return currDir->searchChildren(pr.getObjectName());
+  }
+
+  Directory* FileSystemEnv::getRoot()
+  {
+    return m_root.get();
   }
 } // namespace fs

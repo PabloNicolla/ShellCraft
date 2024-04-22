@@ -1,5 +1,6 @@
 #include "Directory.h"
 
+
 namespace fs
 {
   Directory::Directory(const User* user, const std::string& name, const std::string& parentPath)

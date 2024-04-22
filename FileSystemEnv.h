@@ -4,6 +4,7 @@
 #include "Directory.h"
 #include "User.h"
 
+
 namespace fs
 {
   class FileSystemEnv
@@ -24,5 +25,6 @@ namespace fs
     void saveUserEnv() const;
 
     [[nodiscard]] SystemObject* searchSystemObject(const std::string& path);
+    [[nodiscard]] Directory* getRoot();
   };
 } // namespace fs

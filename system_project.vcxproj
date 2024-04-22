@@ -152,7 +152,6 @@
     <ClInclude Include="File.h" />
     <ClInclude Include="FileSystemEnv.h" />
     <ClInclude Include="FileSystemManager.h" />
-    <ClInclude Include="Flags.h" />
     <ClInclude Include="PathResolver.h" />
     <ClInclude Include="PermissionManager.h" />
     <ClInclude Include="SystemObject.h" />
