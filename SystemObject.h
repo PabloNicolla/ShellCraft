@@ -40,7 +40,7 @@ namespace fs
     std::ofstream& saveToFile(std::ofstream& ofs) const;
     friend std::ofstream& operator<<(std::ofstream& ofs, const SystemObject& so);
 
-    std::ifstream& readFromFile(std::ifstream& ifs);
-    friend std::ifstream& operator>>(std::ifstream& ifs, SystemObject& so);
+    std::istringstream& readFromFile(std::istringstream& ifs);
+    friend std::istringstream& operator>>(std::istringstream& ifs, SystemObject& so);
   };
 } // namespace fs

@@ -10,6 +10,11 @@ namespace fs
     setOwner(user->getUsername());
   }
 
+  File::File(std::istringstream& ifs)
+  {
+    ifs >> *this;
+  }
+
   const std::string& File::getContent() const
   {
     return m_content;

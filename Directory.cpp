@@ -10,6 +10,11 @@ namespace fs
     setType(SystemObjectType::directory);
   }
 
+  Directory::Directory(std::istringstream& ifs)
+  {
+    ifs >> *this;
+  }
+
   size_t Directory::getSize() const
   {
     return 1;

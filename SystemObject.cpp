@@ -92,46 +92,42 @@ namespace fs
     return ofs;
   }
 
-  std::ifstream& SystemObject::readFromFile(std::ifstream& ifs)
+  std::istringstream& SystemObject::readFromFile(std::istringstream& ifs)
   {
-    if (std::string line; std::getline(ifs, line))
-    {
-      std::istringstream iss(line);
-      std::string token;
+    std::string token;
 
-      // Read type
-      std::getline(iss, token, '|');
-      m_type = static_cast<SystemObjectType>(std::stoi(token));
+    // Read type
+    std::getline(ifs, token, '|');
+    m_type = static_cast<SystemObjectType>(std::stoi(token));
 
-      // Read name
-      std::getline(iss, m_name, '|');
+    // Read name
+    std::getline(ifs, m_name, '|');
 
-      // Read owner
-      std::getline(iss, m_owner, '|');
+    // Read owner
+    std::getline(ifs, m_owner, '|');
 
-      // Read created
-      std::getline(iss, token, '|');
-      m_created = static_cast<std::time_t>(std::stol(token));
+    // Read created
+    std::getline(ifs, token, '|');
+    m_created = static_cast<std::time_t>(std::stol(token));
 
-      // Read modified
-      std::getline(iss, token, '|');
-      m_modified = static_cast<std::time_t>(std::stol(token));
+    // Read modified
+    std::getline(ifs, token, '|');
+    m_modified = static_cast<std::time_t>(std::stol(token));
 
-      // Read parentPath
-      std::getline(iss, m_parentPath, '|');
+    // Read parentPath
+    std::getline(ifs, m_parentPath, '|');
 
-      // Read size
-      std::getline(iss, token, '|');
-      m_size = std::stoull(token);
+    // Read size
+    std::getline(ifs, token, '|');
+    m_size = std::stoull(token);
 
-      // Read permissions
-      std::getline(iss, token, '|');
-      m_permissions = std::stoi(token);
-    }
+    // Read permissions
+    std::getline(ifs, token, '|');
+    m_permissions = std::stoi(token);
     return ifs;
   }
 
-  std::ifstream& operator>>(std::ifstream& ifs, SystemObject& so)
+  std::istringstream& operator>>(std::istringstream& ifs, SystemObject& so)
   {
     return so.readFromFile(ifs);
   }

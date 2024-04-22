@@ -12,6 +12,8 @@ namespace fs
 
   public:
     void run();
+
+  private:
     void startFileSystem();
   };
 } // namespace fs

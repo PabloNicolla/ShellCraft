@@ -11,6 +11,7 @@ namespace fs
   enum Action { authenticate, registerUser, exit };
 
   [[nodiscard]] int getAction();
+  void createEssentialFiles();
 
   void FileSystemManager::run()
   {
@@ -42,22 +43,7 @@ namespace fs
 
   void FileSystemManager::startFileSystem()
   {
-    if (!Utils::checkIfDirectoryExists("./fs"))
-    {
-      if (!Utils::createDirectory("./fs"))
-      {
-        std::clog << "ERROR: failed to create fs directory" << std::endl;  // NOLINT(performance-avoid-endl)
-        std::terminate();
-      }
-    }
-    if (!Utils::checkIfDirectoryExists("./fs/home"))
-    {
-      if (!Utils::createDirectory("./fs/home"))
-      {
-        std::clog << "ERROR: failed to create home directory" << std::endl;  // NOLINT(performance-avoid-endl)
-        std::terminate();
-      }
-    }
+    createEssentialFiles();
     auto& mainEnv = m_environments[0];
     mainEnv.loadUserEnv();
     shell::CommandProcessor::run();
@@ -97,5 +83,25 @@ namespace fs
     }
     Utils::bufferSafetyCheck();
     return choice;
+  }
+
+  void createEssentialFiles()
+  {
+    if (!Utils::checkIfDirectoryExists("./fs"))
+    {
+      if (!Utils::createDirectory("./fs"))
+      {
+        std::clog << "ERROR: failed to create fs directory" << std::endl; // NOLINT(performance-avoid-endl)
+        std::terminate();
+      }
+    }
+    if (!Utils::checkIfDirectoryExists("./fs/home"))
+    {
+      if (!Utils::createDirectory("./fs/home"))
+      {
+        std::clog << "ERROR: failed to create home directory" << std::endl; // NOLINT(performance-avoid-endl)
+        std::terminate();
+      }
+    }
   }
 } // namespace fs

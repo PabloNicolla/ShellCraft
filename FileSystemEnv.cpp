@@ -1,13 +1,17 @@
 #include <fstream>
 #include <iostream>
 #include <queue>
-
+#include <sstream>
 #include "FileSystemEnv.h"
+#include "File.h"
+#include "PathResolver.h"
 #include "Utils.h"
 
 namespace fs
 {
-  FileSystemEnv::FileSystemEnv(const User* user) : m_user{ user }, m_rootPath{ "./fs/home/" + m_user->getUsername() }
+  const char* FileSystemEnv::m_usersHomePath{ "fs/home/" };
+
+  FileSystemEnv::FileSystemEnv(const User* user) : m_user{ user }, m_rootPath{ m_usersHomePath + m_user->getUsername() }
   {
   }
 
@@ -31,8 +35,6 @@ namespace fs
 
   void FileSystemEnv::loadUserEnv()
   {
-    
-
     if (!Utils::checkIfDirectoryExists(m_rootPath))
     {
       if (!Utils::createDirectory(m_rootPath))
@@ -44,25 +46,30 @@ namespace fs
     }
     else
     {
-      std::ifstream file{ m_rootPath + ".config_file_tree" };
-
-      while (file)
+      std::ifstream file{ m_rootPath / ".config_file_tree" };
+      std::string line{};
+      while (std::getline(file, line))
       {
-        if (file.peek() == static_cast<int>(SystemObjectType::directory))
+        std::istringstream iss{ line };
+        std::unique_ptr<SystemObject> sysObj;
+        if (line[0] == '0' + static_cast<int>(SystemObjectType::directory))
         {
-          
+          sysObj = std::make_unique<Directory>(iss);
         }
         else
         {
-          
+          sysObj = std::make_unique<File>(iss);
         }
+        (void)sysObj->getParentPath();
+        //search dir
+        //add to dir children
       }
     }
   }
 
   void FileSystemEnv::saveUserEnv() const
   {
-    std::ofstream file{ ".config_file_tree" };
+    std::ofstream file{ m_rootPath / ".config_file_tree" };
     std::queue<const Directory*> directories;
 
     directories.push(m_root.get());
@@ -70,16 +77,22 @@ namespace fs
 
     while (!directories.empty())
     {
-      auto dir = directories.front();
+      const auto dir = directories.front();
       directories.pop();
-      for (const auto& kv : dir->getChildren())
+      for (const auto& [key, val] : dir->getChildren())
       {
-        file << *kv.second;
-        if (kv.second->getType() == SystemObjectType::directory)
+        file << *val;
+        if (val->getType() == SystemObjectType::directory)
         {
-          directories.push(dynamic_cast<const Directory*>(kv.second.get()));
+          directories.push(dynamic_cast<const Directory*>(val.get()));
         }
       }
     }
+  }
+
+  SystemObject* FileSystemEnv::searchSystemObject(const std::string& path)
+  {
+    const PathResolver pr{ path };
+
   }
 } // namespace fs

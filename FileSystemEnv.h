@@ -1,6 +1,6 @@
 #pragma once
+#include <filesystem>
 #include <memory>
-
 #include "Directory.h"
 #include "User.h"
 
@@ -10,7 +10,8 @@ namespace fs
   {
     const User* m_user{};
     std::unique_ptr<Directory> m_root{};
-    std::string m_rootPath{};
+    std::filesystem::path m_rootPath{};
+    static const char* m_usersHomePath;
 
   public:
     explicit FileSystemEnv(const User* user);
@@ -21,5 +22,7 @@ namespace fs
     FileSystemEnv& operator=(FileSystemEnv&& other) noexcept;
     void loadUserEnv();
     void saveUserEnv() const;
+
+    [[nodiscard]] SystemObject* searchSystemObject(const std::string& path);
   };
 } // namespace fs

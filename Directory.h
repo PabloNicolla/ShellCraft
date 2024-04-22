@@ -1,4 +1,5 @@
 #pragma once
+#include <fstream>
 #include <memory>
 #include <unordered_map>
 #include "SystemObject.h"
@@ -12,6 +13,7 @@ namespace fs
 
   public:
     Directory(const User* user, const std::string& name, const std::string& parentPath);
+    explicit Directory(std::istringstream& ifs);
     [[nodiscard]] size_t getSize() const override;
     [[nodiscard]] const std::unordered_map<std::string, std::unique_ptr<SystemObject>>& getChildren() const;
   };
