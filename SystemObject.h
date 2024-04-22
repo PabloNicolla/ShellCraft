@@ -1,7 +1,7 @@
 #pragma once
 #include <ctime>
-#include <string>
 #include <fstream>
+#include <string>
 
 namespace fs
 {

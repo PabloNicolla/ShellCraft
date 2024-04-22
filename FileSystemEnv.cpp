@@ -39,8 +39,7 @@ namespace fs
     {
       if (!Utils::createDirectory(m_rootPath))
       {
-        std::clog << "ERROR: failed to create user directory" << std::endl; // NOLINT(performance-avoid-endl)
-        std::terminate();
+        std::clog << "ERROR: failed to create user directory\n\n";
       }
       m_root = std::make_unique<Directory>(m_user, m_user->getUsername(), "");
     }

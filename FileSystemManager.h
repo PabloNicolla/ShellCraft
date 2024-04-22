@@ -15,5 +15,6 @@ namespace fs
 
   private:
     void startFileSystem();
+    void static createEssentialFiles();
   };
 } // namespace fs

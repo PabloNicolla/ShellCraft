@@ -11,7 +11,6 @@ namespace fs
   enum Action { authenticate, registerUser, exit };
 
   [[nodiscard]] int getAction();
-  void createEssentialFiles();
 
   void FileSystemManager::run()
   {
@@ -85,22 +84,20 @@ namespace fs
     return choice;
   }
 
-  void createEssentialFiles()
+  void FileSystemManager::createEssentialFiles()
   {
     if (!Utils::checkIfDirectoryExists("./fs"))
     {
       if (!Utils::createDirectory("./fs"))
       {
-        std::clog << "ERROR: failed to create fs directory" << std::endl; // NOLINT(performance-avoid-endl)
-        std::terminate();
+        std::clog << "ERROR: failed to create fs directory\n\n";
       }
     }
     if (!Utils::checkIfDirectoryExists("./fs/home"))
     {
       if (!Utils::createDirectory("./fs/home"))
       {
-        std::clog << "ERROR: failed to create home directory" << std::endl; // NOLINT(performance-avoid-endl)
-        std::terminate();
+        std::clog << "ERROR: failed to create home directory\n\n";
       }
     }
   }

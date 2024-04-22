@@ -1,4 +1,5 @@
 #pragma once
+#include <filesystem>
 #include <optional>
 #include <string>
 #include <vector>
@@ -11,6 +12,7 @@ namespace fs
   constexpr int c_minUsernameLength{ 3 };
   constexpr int c_maxPasswordLength{ 50 };
   constexpr int c_minPasswordLength{ 3 };
+  const std::filesystem::path c_userManagerPath{ "./fs/userManager" };
 
   class UserManager
   {
@@ -29,7 +31,8 @@ namespace fs
   private:
     void loadUsers();
     [[nodiscard]] std::optional<User> createUser() const;
-    [[nodiscard]] std::optional<std::string> getUsername() const;
-    [[nodiscard]] std::optional<std::string> getPassword() const;
+    [[nodiscard]] static std::optional<std::string> getUsername();
+    [[nodiscard]] static std::optional<std::string> getPassword();
+    void static createEssentialFiles();
   };
 } // namespace fs

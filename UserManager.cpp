@@ -51,6 +51,12 @@ namespace fs
 
   void UserManager::saveUsers()
   {
+    createEssentialFiles();
+    std::ofstream file{ c_userManagerPath / "users.txt" };
+    std::for_each(m_users.begin(), m_users.end(), [&](const User& user)
+    {
+      file << user << "\n";
+    });
   }
 
   bool UserManager::usernameExists(const std::string_view username) const
@@ -81,6 +87,16 @@ namespace fs
 
   void UserManager::loadUsers()
   {
+    if (Utils::checkIfDirectoryExists(c_userManagerPath))
+    {
+      std::ifstream file{ c_userManagerPath / "users.txt" };
+      std::string line{};
+      while (std::getline(file, line))
+      {
+        std::istringstream iss{ line };
+        m_users.emplace_back(iss);
+      }
+    }
   }
 
   std::optional<User> UserManager::createUser() const
@@ -119,7 +135,7 @@ namespace fs
     return User{ username, password };
   }
 
-  std::optional<std::string> UserManager::getUsername() const
+  std::optional<std::string> UserManager::getUsername()
   {
     std::string username{};
     bool isValid{ false };
@@ -157,7 +173,7 @@ namespace fs
     return { username };
   }
 
-  std::optional<std::string> UserManager::getPassword() const
+  std::optional<std::string> UserManager::getPassword()
   {
     std::string password{};
     bool isValid{ false };
@@ -179,5 +195,23 @@ namespace fs
 
     Utils::bufferSafetyCheck();
     return { password };
+  }
+
+  void UserManager::createEssentialFiles()
+  {
+    if (!Utils::checkIfDirectoryExists("./fs"))
+    {
+      if (!Utils::createDirectory("./fs"))
+      {
+        std::clog << "ERROR: failed to create fs directory\n\n";
+      }
+    }
+    if (!Utils::checkIfDirectoryExists(c_userManagerPath))
+    {
+      if (!Utils::createDirectory(c_userManagerPath))
+      {
+        std::clog << "ERROR: UserManager::saveUsers() failed to create directory\n\n";
+      }
+    }
   }
 } // namespace fs

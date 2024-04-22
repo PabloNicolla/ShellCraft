@@ -1,5 +1,4 @@
 #include <sstream>
-
 #include "SystemObject.h"
 
 namespace fs
