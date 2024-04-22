@@ -48,6 +48,11 @@ namespace fs
     {
       std::ifstream file{ m_rootPath / ".config_file_tree" };
       std::string line{};
+
+      std::getline(file, line);
+      std::istringstream rootData{ line };
+      m_root = std::make_unique<Directory>(rootData);
+
       while (std::getline(file, line))
       {
         std::istringstream iss{ line };
@@ -60,9 +65,19 @@ namespace fs
         {
           sysObj = std::make_unique<File>(iss);
         }
-        (void)sysObj->getParentPath();
-        //search dir
-        //add to dir children
+
+        auto parent = searchSystemObject(sysObj->getParentPath());
+        if (parent->getType() == SystemObjectType::directory)
+        {
+          if (!dynamic_cast<Directory*>(parent)->addChildren(std::move(sysObj)))
+          {
+            std::clog << "ERROR: failed to add children to directory\n\n";
+          }
+        }
+        else
+        {
+          std::clog << "ERROR: trying to add an object to a non-directory-object\n\n";
+        }
       }
     }
   }
@@ -81,6 +96,7 @@ namespace fs
       directories.pop();
       for (const auto& [key, val] : dir->getChildren())
       {
+        file << '\n';
         file << *val;
         if (val->getType() == SystemObjectType::directory)
         {
@@ -93,6 +109,23 @@ namespace fs
   SystemObject* FileSystemEnv::searchSystemObject(const std::string& path)
   {
     const PathResolver pr{ path };
-
+    Directory* currDir = m_root.get();
+    for (const auto& dirName : pr.getParentPath())
+    {
+      if (const auto sysObj = currDir->searchChildren(dirName);
+        sysObj && sysObj->getType() == SystemObjectType::directory)
+      {
+        currDir = dynamic_cast<Directory*>(sysObj);
+      }
+      else
+      {
+        return nullptr;
+      }
+    }
+    if (path.empty())
+    {
+      return m_root.get();
+    }
+    return currDir->searchChildren(pr.getObjectName());
   }
 } // namespace fs
