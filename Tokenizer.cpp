@@ -78,4 +78,19 @@ namespace shell
     m_flags.clear();
     m_commandName = "";
   }
+
+  const std::string& Tokenizer::getCommandName() const
+  {
+    return m_commandName;
+  }
+
+  const std::vector<std::string>& Tokenizer::getFlags() const
+  {
+    return m_flags;
+  }
+
+  const std::vector<std::string>& Tokenizer::getArguments() const
+  {
+    return m_arguments;
+  }
 } // namespace shell

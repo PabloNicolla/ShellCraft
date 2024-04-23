@@ -21,9 +21,9 @@ namespace fs
     FileSystemEnv& operator=(const FileSystemEnv&) = delete;
     FileSystemEnv(FileSystemEnv&& other) noexcept;
     FileSystemEnv& operator=(FileSystemEnv&& other) noexcept;
+
     void loadUserEnv();
     void saveUserEnv() const;
-
     [[nodiscard]] SystemObject* searchSystemObject(const std::string& path);
     [[nodiscard]] Directory* getRoot();
   };

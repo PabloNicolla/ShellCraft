@@ -1,12 +1,11 @@
 #pragma once
 #include "FileSystemEnv.h"
+#include "Flags.h"
 #include "UserManager.h"
 
 
 namespace fs
 {
-  enum class AppState { running, exiting };
-
   class FileSystemManager
   {
     UserManager m_userManager{};

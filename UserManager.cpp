@@ -7,6 +7,8 @@
 
 namespace fs
 {
+  const std::filesystem::path UserManager::userManagerPath{ "./fs/userManager" };
+
   UserManager::UserManager()
   {
     loadUsers();
@@ -52,7 +54,7 @@ namespace fs
   void UserManager::saveUsers()
   {
     createEssentialFiles();
-    std::ofstream file{ c_userManagerPath / "users.txt" };
+    std::ofstream file{ userManagerPath / "users.txt" };
     std::for_each(m_users.begin(), m_users.end(), [&](const User& user)
     {
       file << user << "\n";
@@ -104,9 +106,9 @@ namespace fs
 
   void UserManager::loadUsers()
   {
-    if (Utils::checkIfDirectoryExists(c_userManagerPath))
+    if (Utils::checkIfDirectoryExists(userManagerPath))
     {
-      std::ifstream file{ c_userManagerPath / "users.txt" };
+      std::ifstream file{ userManagerPath / "users.txt" };
       std::string line{};
       while (std::getline(file, line))
       {
@@ -164,11 +166,11 @@ namespace fs
       if (auto line = Utils::getLine())
       {
         username = Utils::trim(line.value());
-        if (username.size() < c_minUsernameLength || username.size() >= c_maxUsernameLength)
+        if (username.size() < minUsernameLength || username.size() >= maxUsernameLength)
         {
           std::cout << "\nInvalid username.\n"
             << "Username cannot have less than " << 3 << " or more than "
-            << c_maxUsernameLength << " characters" << "\n";
+            << maxUsernameLength << " characters" << "\n";
         }
         else if (!Utils::areAllCharactersAlpha(username))
         {
@@ -225,9 +227,9 @@ namespace fs
         std::clog << "ERROR: failed to create fs directory\n\n";
       }
     }
-    if (!Utils::checkIfDirectoryExists(c_userManagerPath))
+    if (!Utils::checkIfDirectoryExists(userManagerPath))
     {
-      if (!Utils::createDirectory(c_userManagerPath))
+      if (!Utils::createDirectory(userManagerPath))
       {
         std::clog << "ERROR: UserManager::saveUsers() failed to create directory\n\n";
       }

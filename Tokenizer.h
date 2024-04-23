@@ -11,10 +11,10 @@ namespace shell
     std::vector<std::string> m_arguments{};
 
   public:
-    [[nodiscard]] bool process(const std::string& tLine);
     void clear();
+    [[nodiscard]] bool process(const std::string& tLine);
+    [[nodiscard]] const std::string& getCommandName() const;
+    [[nodiscard]] const std::vector<std::string>& getFlags() const;
+    [[nodiscard]] const std::vector<std::string>& getArguments() const;
   };
-
 } // namespace shell
-
-

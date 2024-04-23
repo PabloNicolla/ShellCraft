@@ -19,12 +19,11 @@ namespace fs
 
     [[nodiscard]] std::string static trim(const std::string& str, const std::string& whitespace = " \t");
     [[nodiscard]] bool static areAllCharactersAlpha(const std::string& str);
-
     [[nodiscard]] std::optional<int> static getNumber();
     [[nodiscard]] std::optional<std::string> static getLine();
-    void static bufferSafetyCheck();
     [[nodiscard]] bool static promptToExitLoop();
     [[nodiscard]] bool static checkIfDirectoryExists(const std::filesystem::path& dir);
     [[nodiscard]] bool static createDirectory(const std::filesystem::path& dir);
+    void static bufferSafetyCheck();
   };
 } // namespace fs
