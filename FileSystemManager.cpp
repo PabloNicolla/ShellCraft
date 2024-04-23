@@ -47,7 +47,7 @@ namespace fs
     return nullptr;
   }
 
-  FileSystemEnv* FileSystemManager::getEnv(const std::string& user)
+  FileSystemEnv* FileSystemManager::getEnv([[maybe_unused]] const std::string& user)
   {
     return nullptr; // TODO(pablo)
   }

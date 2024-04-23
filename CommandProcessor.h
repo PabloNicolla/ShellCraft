@@ -8,9 +8,10 @@ namespace shell
 {
   class CommandProcessor
   {
+  private:
     fs::Directory* m_workingDir;
     fs::Directory* m_root;
-    [[maybe_unused]] fs::FileSystemManager* m_fileSystemManager;
+    fs::FileSystemManager* m_fileSystemManager;
     std::unordered_map<std::string, std::unique_ptr<Command>(*)()> m_commands{};
 
   public:

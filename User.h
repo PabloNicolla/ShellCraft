@@ -8,6 +8,7 @@ namespace fs
 {
   class User
   {
+  private:
     std::string m_username;
     std::string m_password;
 

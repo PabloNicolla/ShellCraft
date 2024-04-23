@@ -9,6 +9,7 @@ namespace fs
 {
   class UserManager
   {
+  private:
     std::vector<User> m_users{};
 
   public:

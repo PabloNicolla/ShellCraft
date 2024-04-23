@@ -35,10 +35,16 @@ namespace shell
         continue;
       }
       provideResources(cmd.get());
-      state = cmd->execute();
+      state = cmd->execute(tokenizer);
       if (state != ShellFlag::run)
       {
-        // ask
+        std::cout << "Are you sure? (y/N): ";
+        std::getline(std::cin, terminalLine);
+
+        if (!(terminalLine == "y" || terminalLine == "Y"))
+        {
+          state = ShellFlag::run;
+        }
       }
     }
     return state == ShellFlag::exit ? fs::AppState::exiting : fs::AppState::running;
@@ -55,6 +61,10 @@ namespace shell
       else if (requiredResource == ResourceTypes::workingDir)
       {
         cmd->setWorkingDir(m_workingDir);
+      }
+      else if (requiredResource == ResourceTypes::env)
+      {
+        cmd->setEnv(m_fileSystemManager->getMainEnv());
       }
     }
   }

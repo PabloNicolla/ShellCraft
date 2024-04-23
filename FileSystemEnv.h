@@ -9,6 +9,7 @@ namespace fs
 {
   class FileSystemEnv
   {
+  private:
     const User* m_user{};
     std::unique_ptr<Directory> m_root{};
     std::filesystem::path m_rootPath{};

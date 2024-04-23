@@ -3,7 +3,7 @@ namespace shell
 {
   enum class ShellFlag { exit, run, logout };
 
-  enum class ResourceTypes { root, workingDir };
+  enum class ResourceTypes { root, workingDir, env };
 } // namespace shell
 
 namespace fs

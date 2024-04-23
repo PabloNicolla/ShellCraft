@@ -7,6 +7,7 @@ namespace fs
 {
   class File final : public SystemObject
   {
+  private:
     std::string m_content;
 
   public:

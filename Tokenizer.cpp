@@ -14,15 +14,15 @@ namespace shell
     {
       if (tokensSaved == 0)
       {
-        m_commandName = tLine.substr(tokenStart, tokenEnd);
+        m_commandName = tLine.substr(tokenStart, tokenEnd - tokenStart);
       }
       else if (tLine[tokenStart] == '-')
       {
-        m_flags.emplace_back(tLine.substr(tokenStart, tokenEnd));
+        m_flags.emplace_back(tLine.substr(tokenStart, tokenEnd - tokenStart));
       }
       else
       {
-        m_arguments.emplace_back(tLine.substr(tokenStart, tokenEnd));
+        m_arguments.emplace_back(tLine.substr(tokenStart, tokenEnd - tokenStart));
       }
       ++tokensSaved;
     };

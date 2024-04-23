@@ -8,6 +8,7 @@ namespace fs
 {
   class FileSystemManager
   {
+  private:
     UserManager m_userManager{};
     std::vector<FileSystemEnv> m_environments{};
 

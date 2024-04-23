@@ -9,6 +9,7 @@ namespace fs
 {
   class SystemObject
   {
+  private:
     SystemObjectType m_type;
     std::string m_name{};
     std::string m_owner{};

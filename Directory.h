@@ -9,6 +9,7 @@ namespace fs
 {
   class Directory final : public SystemObject
   {
+  private:
     std::unordered_map<std::string, std::unique_ptr<SystemObject>> m_children{};
 
   public:

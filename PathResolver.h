@@ -6,6 +6,7 @@ namespace fs
 {
   class PathResolver
   {
+  private:
     std::vector<std::string> m_parentPath{};
     std::string m_objectName;
 

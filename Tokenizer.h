@@ -6,6 +6,7 @@ namespace shell
 {
   class Tokenizer
   {
+  private:
     std::string m_commandName{};
     std::vector<std::string> m_flags{};
     std::vector<std::string> m_arguments{};
