@@ -121,4 +121,32 @@ namespace shell
     [[nodiscard]] static std::unique_ptr<Command> factory();
     [[nodiscard]] bool validateTokens(const Tokenizer& tokenizer);
   };
+
+  class CommandTouch final : public Command
+  {
+    fs::Directory* m_pDirectory{};
+    std::string m_dirName{};
+
+  public:
+    CommandTouch() = default;
+    [[nodiscard]] ShellFlag execute(const Tokenizer& tokenizer) override;
+    [[nodiscard]] ShellFlag help() override;
+    [[nodiscard]] std::vector<ResourceTypes> requiredResources() override;
+    [[nodiscard]] static std::unique_ptr<Command> factory();
+    [[nodiscard]] bool validateTokens(const Tokenizer& tokenizer);
+  };
+
+  class CommandEcho final : public Command
+  {
+    fs::Directory* m_pDirectory{};
+    std::string m_dirName{};
+
+  public:
+    CommandEcho() = default;
+    [[nodiscard]] ShellFlag execute(const Tokenizer& tokenizer) override;
+    [[nodiscard]] ShellFlag help() override;
+    [[nodiscard]] std::vector<ResourceTypes> requiredResources() override;
+    [[nodiscard]] static std::unique_ptr<Command> factory();
+    [[nodiscard]] bool validateTokens(const Tokenizer& tokenizer);
+  };
 } // namespace shell

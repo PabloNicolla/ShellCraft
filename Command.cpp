@@ -59,7 +59,10 @@ namespace shell
     {
       parentPath += token + "/";
     }
-    parentPath.pop_back();
+    if (parentPath.size() > 1)
+    {
+      parentPath.pop_back();
+    }
     const auto so = m_env->searchSystemObject(cmdPathResolution(parentPath));
     if (!so)
     {
@@ -377,7 +380,7 @@ namespace shell
   {
     if (validateTokens(tokenizer))
     {
-      if (m_pDirectory == m_root || m_workingDir == m_root)
+      if (m_pDirectory == m_root)
       {
         (void)m_root->addChildren(std::make_unique<fs::Directory>(m_env->getUser(), m_dirName, ""));
       }
@@ -425,6 +428,7 @@ namespace shell
 
     const fs::PathResolver pr{ tokenizer.getArguments()[0] };
     m_dirName = pr.getObjectName();
+    m_pDirectory = m_workingDir;
 
     if (!pr.getParentPath().empty())
     {
