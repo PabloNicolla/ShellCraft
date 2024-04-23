@@ -27,5 +27,6 @@ namespace fs
     void saveUserEnv() const;
     [[nodiscard]] SystemObject* searchSystemObject(const std::string& path);
     [[nodiscard]] Directory* getRoot();
+    [[nodiscard]] const User* getUser() const;
   };
 } // namespace fs

@@ -3,6 +3,7 @@
 #include "Directory.h"
 #include "FileSystemEnv.h"
 #include "Flags.h"
+#include "PathResolver.h"
 #include "Tokenizer.h"
 
 namespace shell
@@ -28,7 +29,12 @@ namespace shell
     void setRoot(fs::Directory* root);
     void setWorkingDir(fs::Directory* workingDir);
     void setEnv(fs::FileSystemEnv* env);
+    [[nodiscard]] fs::Directory* getWorkingDir() const;
     [[nodiscard]] std::string& cmdPathResolution(std::string& path) const;
+    [[nodiscard]] fs::Directory* ensureFoundDirectory(const Tokenizer& tokenizer) const;
+
+    [[nodiscard]] fs::Directory* ensureFoundParentDir(const fs::PathResolver& pr) const;
+    [[nodiscard]] fs::SystemObject* ensureFoundSysObj(const fs::PathResolver& pr) const; // TODO(p)
   };
 
 
@@ -57,6 +63,7 @@ namespace shell
   class CommandLs final : public Command
   {
     fs::Directory* m_target{};
+
   public:
     CommandLs() = default;
     [[nodiscard]] ShellFlag execute(const Tokenizer& tokenizer) override;
@@ -68,13 +75,15 @@ namespace shell
 
   class CommandCd final : public Command
   {
+    fs::Directory* m_target{};
+
   public:
     CommandCd() = default;
     [[nodiscard]] ShellFlag execute(const Tokenizer& tokenizer) override;
     [[nodiscard]] ShellFlag help() override;
     [[nodiscard]] std::vector<ResourceTypes> requiredResources() override;
     [[nodiscard]] static std::unique_ptr<Command> factory();
-    [[nodiscard]] bool validateTokens(const Tokenizer& tokenizer) const;
+    [[nodiscard]] bool validateTokens(const Tokenizer& tokenizer);
   };
 
   class CommandCat final : public Command
@@ -101,12 +110,15 @@ namespace shell
 
   class CommandMkdir final : public Command
   {
+    fs::Directory* m_pDirectory{};
+    std::string m_dirName{};
+
   public:
     CommandMkdir() = default;
     [[nodiscard]] ShellFlag execute(const Tokenizer& tokenizer) override;
     [[nodiscard]] ShellFlag help() override;
     [[nodiscard]] std::vector<ResourceTypes> requiredResources() override;
     [[nodiscard]] static std::unique_ptr<Command> factory();
-    [[nodiscard]] bool validateTokens(const Tokenizer& tokenizer) const;
+    [[nodiscard]] bool validateTokens(const Tokenizer& tokenizer);
   };
 } // namespace shell

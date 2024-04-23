@@ -12,6 +12,11 @@ namespace fs
 {
   const char* FileSystemEnv::m_usersHomePath{ "fs/home/" };
 
+  const User* FileSystemEnv::getUser() const
+  {
+    return m_user;
+  }
+
   FileSystemEnv::FileSystemEnv(const User* user) : m_user{ user }, m_rootPath{ m_usersHomePath + m_user->getUsername() }
   {
   }

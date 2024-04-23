@@ -11,6 +11,9 @@ namespace shell
     m_commands["exit"] = CommandExit::factory;
     m_commands["logout"] = CommandLogout::factory;
     m_commands["ls"] = CommandLs::factory;
+    m_commands["cd"] = CommandCd::factory;
+    m_commands["clear"] = CommandClear::factory;
+    m_commands["mkdir"] = CommandMkdir::factory;
   }
 
   fs::AppState CommandProcessor::run()
@@ -22,20 +25,31 @@ namespace shell
     while (state != ShellFlag::exit and state != ShellFlag::logout)
     {
       tokenizer.clear();
+      if (m_root != m_workingDir)
+      {
+        std::cout << "/" << m_root->getName()
+          << (m_workingDir->getParentPath().empty() ? "" : "/");
+      }
       std::cout << m_workingDir->getParentPath() << "/" << m_workingDir->getName() << " >";
       std::getline(std::cin, terminalLine);
       terminalLine.append(" ");
       if (!tokenizer.process(terminalLine))
       {
+        std::cout << "Invalid syntax\n\n";
         continue;
       }
       auto cmd = findCommand(tokenizer);
       if (!cmd)
       {
+        std::cout << "Command not found\n\n";
         continue;
       }
       provideResources(cmd.get());
       state = cmd->execute(tokenizer);
+      if (cmd->getWorkingDir())
+      {
+        m_workingDir = cmd->getWorkingDir();
+      }
       if (state != ShellFlag::run)
       {
         std::cout << "Are you sure? (y/N): ";
