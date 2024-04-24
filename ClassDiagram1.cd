@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="fs::UserManager" Collapsed="true">
+    <Position X="7" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAIAGAAAAAAAAJQAgYAAEACABCAgAAAEABABAAAAg=</HashCode>
+      <FileName>UserManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="fs::FileSystemManager" Collapsed="true">
+    <Position X="7" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAIQgAAAAAAAAAAABAAAAAAAABAAAAAAAAgAAAAQAA=</HashCode>
+      <FileName>FileSystemManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="fs::User" Collapsed="true">
+    <Position X="5.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAEBAAAAAAAAAAAIBQAgAAAAAAAAAAAAAAAAAIA=</HashCode>
+      <FileName>User.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="fs::Utils" Collapsed="true">
+    <Position X="8.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAACAAAUABIAAAAAAAAAAAAAAQAAgQEABAAA=</HashCode>
+      <FileName>Utils.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="fs::FileSystemEnv" Collapsed="true">
+    <Position X="5.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAASAIIAAAACAAAAAAAAAAAAAAAggAAQxABAAAAA=</HashCode>
+      <FileName>FileSystemEnv.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="fs::Directory" Collapsed="true">
+    <Position X="0.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABAAAIAIAAAAAAAAAAAgAAAAAAIAAEAAAAAAAAA=</HashCode>
+      <FileName>Directory.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="fs::File" Collapsed="true">
+    <Position X="2.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIAAAAACAAAAAAAAAAAEAAAQAAAAAAAgAAA=</HashCode>
+      <FileName>File.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="fs::SystemObject" Collapsed="true">
+    <Position X="1.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EggAoAABAIAEAAAAEAAAAAAgAVAIAQBAAEAEAAKAIQE=</HashCode>
+      <FileName>SystemObject.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="fs::PathResolver" Collapsed="true">
+    <Position X="8.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAEAAAAAIIBA=</HashCode>
+      <FileName>PathResolver.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="fs::Action" Collapsed="true">
+    <Position X="5.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAADAAAAA=</HashCode>
+      <FileName>FileSystemManager.cpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="fs::AppState" Collapsed="true">
+    <Position X="7" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAIAAAAAAAA=</HashCode>
+      <FileName>Flags.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="fs::SystemObjectType" Collapsed="true">
+    <Position X="8.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAABAAAAAAAAAA=</HashCode>
+      <FileName>Flags.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

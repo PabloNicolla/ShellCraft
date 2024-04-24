@@ -1,0 +1,130 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="shell::Command" Collapsed="true">
+    <Position X="6.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAAAgAAChAAAAEBoAAgAAICAAACAAhAAAAACA=</HashCode>
+      <FileName>Command.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="shell::CommandExit" Collapsed="true">
+    <Position X="2.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAAAAgAAgAAAAEAAAAAAABAAAAAAAAAQAAAAA=</HashCode>
+      <FileName>Command.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="shell::CommandLogout" Collapsed="true">
+    <Position X="0.5" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAAAAgAAgAAAAEAAAAABABAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Command.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="shell::CommandLs" Collapsed="true">
+    <Position X="4.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAAAAgAAgAAEAEAAAAAAABAQAAAAAAAAAAAAA=</HashCode>
+      <FileName>Command.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="shell::CommandCd" Collapsed="true">
+    <Position X="4.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAAAAgAAgAAAAEAAAAAAABAQAAAAAAAAAAgAA=</HashCode>
+      <FileName>Command.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="shell::CommandCat" Collapsed="true">
+    <Position X="0.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAAAAgAAgAAAAEAAAAAAABAAAAAAAAAAAAACA=</HashCode>
+      <FileName>Command.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="shell::CommandClear" Collapsed="true">
+    <Position X="2.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAgAAgAAgAAAAEAAAAAAABAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Command.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="shell::CommandMkdir" Collapsed="true">
+    <Position X="2.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgEAAIgAAgAAAAEAAAAAAABAAAAAAABAAAAAAA=</HashCode>
+      <FileName>Command.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="shell::CommandRmdir" Collapsed="true">
+    <Position X="4.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAAAIgAAgAAAAEAAAAAAAhAAAAAAABAAAAAAA=</HashCode>
+      <FileName>Command.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="shell::CommandTouch" Collapsed="true">
+    <Position X="4.5" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAAAIgAAgAAAAEAAAAAAQBAAAAAAABAAAAAAA=</HashCode>
+      <FileName>Command.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="shell::CommandEcho" Collapsed="true">
+    <Position X="0.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAAAIgAAgAAAAEAAAAAAABABAAAAABAAAAAAA=</HashCode>
+      <FileName>Command.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="shell::CommandRm" Collapsed="true">
+    <Position X="0.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAAAIgABgAAAAEAAAAAAABAAAAAAABAAAAAAA=</HashCode>
+      <FileName>Command.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="shell::CommandHelp" Collapsed="true">
+    <Position X="2.5" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAAAIgAAgAAAAEAAAAAAABAABAAAABAAAAAAA=</HashCode>
+      <FileName>Command.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="shell::CommandProcessor" Collapsed="true">
+    <Position X="10.5" Y="1.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAQAgAQAAAAACAAAAEAAAAAAEAAAAAAAAABAAAABAA=</HashCode>
+      <FileName>CommandProcessor.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="shell::CommandTokens" Collapsed="true">
+    <Position X="12.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAgAIAAAAIAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CommandTokens.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="shell::Tokenizer" Collapsed="true">
+    <Position X="10.5" Y="2.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>BEAAAAAAAEBAAAAAAAAAAAIAAAAAAAIAAAAAAAQAAAg=</HashCode>
+      <FileName>Tokenizer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="shell::ShellFlag" Collapsed="true">
+    <Position X="12.75" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAAAAAAAAAAAAAAAAAAACAAAAAAAAACAAAAA=</HashCode>
+      <FileName>Flags.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="shell::ResourceTypes" Collapsed="true">
+    <Position X="10.5" Y="4" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAACAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Flags.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

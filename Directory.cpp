@@ -44,4 +44,9 @@ namespace fs
     m_children[so->getName()] = std::move(so);
     return true;
   }
+
+  void Directory::removeChild(const std::string& key)
+  {
+    m_children.erase(key);
+  }
 } // namespace fs

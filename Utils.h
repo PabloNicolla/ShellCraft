@@ -24,6 +24,8 @@ namespace fs
     [[nodiscard]] bool static promptToExitLoop();
     [[nodiscard]] bool static checkIfDirectoryExists(const std::filesystem::path& dir);
     [[nodiscard]] bool static createDirectory(const std::filesystem::path& dir);
+    [[nodiscard]] bool static createFile(const std::filesystem::path& file);
+    [[nodiscard]] bool static removeFile(const std::filesystem::path& file);
     void static bufferSafetyCheck();
   };
 } // namespace fs

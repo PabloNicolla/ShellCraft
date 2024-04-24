@@ -2,6 +2,7 @@
 #include "Command.h"
 
 #include "CommandTokens.h"
+#include "File.h"
 #include "PathResolver.h"
 #include "Utils.h"
 
@@ -152,10 +153,12 @@ namespace shell
     if (!CommandTokens::noArguments(tokenizer))
     {
       std::cout << "exit does not take arguments\n";
+      return false;
     }
     if (!CommandTokens::noFlags(tokenizer))
     {
       std::cout << "exit does not take flags\n";
+      return false;
     }
     return true;
   }
@@ -193,10 +196,12 @@ namespace shell
     if (!CommandTokens::noArguments(tokenizer))
     {
       std::cout << "logout does not take arguments\n";
+      return false;
     }
     if (!CommandTokens::noFlags(tokenizer))
     {
       std::cout << "logout does not take flags\n";
+      return false;
     }
     return true;
   }
@@ -333,6 +338,7 @@ namespace shell
 //  }
 //} // namespace shell
 
+// clear
 namespace shell
 {
   ShellFlag CommandClear::execute(const Tokenizer& tokenizer)
@@ -374,6 +380,7 @@ namespace shell
   }
 } // namespace shell
 
+// mkdir
 namespace shell
 {
   ShellFlag CommandMkdir::execute(const Tokenizer& tokenizer)
@@ -384,19 +391,12 @@ namespace shell
       {
         (void)m_root->addChildren(std::make_unique<fs::Directory>(m_env->getUser(), m_dirName, ""));
       }
-      else if (m_pDirectory)
+      else
       {
         (void)m_pDirectory->addChildren(std::make_unique<fs::Directory>(m_env->getUser(), m_dirName,
           (m_pDirectory->getParentPath().empty()
              ? ""
              : m_pDirectory->getParentPath() + "/") + m_pDirectory->getName()));
-      }
-      else
-      {
-        (void)m_workingDir->addChildren(std::make_unique<fs::Directory>(m_env->getUser(), m_dirName,
-          (m_workingDir->getParentPath().empty()
-             ? ""
-             : m_workingDir->getParentPath() + "/") + m_workingDir->getName()));
       }
     }
     return ShellFlag::run;
@@ -437,24 +437,170 @@ namespace shell
       {
         return false;
       }
-      for (const auto& [k, v] : m_pDirectory->getChildren())
+    }
+    for (const auto& [k, v] : m_pDirectory->getChildren())
+    {
+      if (k == m_dirName)
       {
-        if (v->getName() == m_dirName)
-        {
-          std::cout << "an object is already using this name\n";
-          return false;
-        }
+        std::cout << "an object is already using this name\n";
+        return false;
       }
     }
-    else
+    return true;
+  }
+} // namespace shell
+
+// rmdir
+namespace shell
+{
+  ShellFlag CommandRmdir::execute(const Tokenizer& tokenizer)
+  {
+    if (validateTokens(tokenizer))
     {
-      for (const auto& [k, v] : m_workingDir->getChildren())
+      m_pDirectory->removeChild(m_dirName);
+    }
+    return ShellFlag::run;
+  }
+
+  ShellFlag CommandRmdir::help()
+  {
+    std::cout << "rmdir - remove an empty directory\n";
+    return ShellFlag::run;
+  }
+
+  std::vector<ResourceTypes> CommandRmdir::requiredResources()
+  {
+    return { ResourceTypes::root, ResourceTypes::workingDir, ResourceTypes::env };
+  }
+
+  std::unique_ptr<Command> CommandRmdir::factory()
+  {
+    return std::make_unique<CommandRmdir>();
+  }
+
+  bool CommandRmdir::validateTokens(const Tokenizer& tokenizer)
+  {
+    if (!CommandTokens::expectedQtyArguments(tokenizer, 1, 1))
+    {
+      std::cout << "invalid number of arguments\n";
+      return false;
+    }
+
+    const fs::PathResolver pr{ tokenizer.getArguments()[0] };
+    m_dirName = pr.getObjectName();
+    m_pDirectory = m_workingDir;
+
+    if (!pr.getParentPath().empty())
+    {
+      m_pDirectory = ensureFoundParentDir(pr);
+      if (!m_pDirectory)
       {
-        if (v->getName() == m_dirName)
+        return false;
+      }
+    }
+    for (const auto& [k, v] : m_pDirectory->getChildren())
+    {
+      if (k == m_dirName)
+      {
+        if (v->getType() != fs::SystemObjectType::directory)
         {
-          std::cout << "an object is already using this name\n";
+          std::cout << "rmdir can only be used with directories\n";
           return false;
         }
+        if (!dynamic_cast<fs::Directory*>(v.get())->getChildren().empty())
+        {
+          std::cout << "rmdir can only be used with empty directories\n";
+          return false;
+        }
+        return true;
+      }
+    }
+    std::cout << "directory not found\n";
+    return false;
+  }
+} // namespace shell
+
+namespace shell
+{
+  ShellFlag CommandTouch::execute(const Tokenizer& tokenizer)
+  {
+    if (validateTokens(tokenizer))
+    {
+      if (m_pDirectory == m_root)
+      {
+        (void)m_root->addChildren(std::make_unique<fs::File>(m_env->getUser(), m_fileName, ""));
+        (void)fs::Utils::createFile("./fs/home/" + m_env->getUser()->getUsername() + "/" + m_fileName);
+      }
+      else
+      {
+        std::string parentPath = (m_pDirectory->getParentPath().empty()
+                                    ? ""
+                                    : m_pDirectory->getParentPath() + "/") + m_pDirectory->getName();
+        (void)m_pDirectory->addChildren(std::make_unique<fs::File>(m_env->getUser(), m_fileName, parentPath));
+        std::replace_if(parentPath.begin(), parentPath.end(), [](const char c)
+        {
+          if (c == '/')
+          {
+            return true;
+          }
+          return false;
+        }, '_');
+        (void)fs::Utils::createFile("./fs/home/" + m_env->getUser()->getUsername() + "/" + parentPath + "_" + m_fileName);
+      }
+    }
+    return ShellFlag::run;
+  }
+
+  ShellFlag CommandTouch::help()
+  {
+    std::cout << "touch - create file\n";
+    return ShellFlag::run;
+  }
+
+  std::vector<ResourceTypes> CommandTouch::requiredResources()
+  {
+    return { ResourceTypes::root, ResourceTypes::workingDir, ResourceTypes::env };
+  }
+
+  std::unique_ptr<Command> CommandTouch::factory()
+  {
+    return std::make_unique<CommandTouch>();
+  }
+
+  bool CommandTouch::validateTokens(const Tokenizer& tokenizer)
+  {
+    if (!CommandTokens::expectedQtyArguments(tokenizer, 1, 1))
+    {
+      std::cout << "invalid number of arguments\n";
+      return false;
+    }
+
+    const fs::PathResolver pr{ tokenizer.getArguments()[0] };
+    m_fileName = pr.getObjectName();
+    m_pDirectory = m_workingDir;
+
+    if (!pr.getParentPath().empty())
+    {
+      m_pDirectory = ensureFoundParentDir(pr);
+      if (!m_pDirectory)
+      {
+        return false;
+      }
+    }
+    for (const auto& [k, v] : m_pDirectory->getChildren())
+    {
+      if (k == m_fileName)
+      {
+        std::cout << "an object is already using this name\n";
+        return false;
+      }
+    }
+    for (const auto c : m_fileName)
+    {
+      if (c == '_')
+      {
+        std::cout << "'_' is not allowed in file's name\n";
+        return false;
       }
     }
     return true;

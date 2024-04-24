@@ -14,6 +14,8 @@ namespace shell
     m_commands["cd"] = CommandCd::factory;
     m_commands["clear"] = CommandClear::factory;
     m_commands["mkdir"] = CommandMkdir::factory;
+    m_commands["rmdir"] = CommandRmdir::factory;
+    m_commands["touch"] = CommandTouch::factory;
   }
 
   fs::AppState CommandProcessor::run()

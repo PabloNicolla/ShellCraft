@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <fstream>
 #include <iostream>
 #include <optional>
 #include "Utils.h"
@@ -96,5 +97,17 @@ namespace fs
   bool Utils::createDirectory(const std::filesystem::path& dir)
   {
     return std::filesystem::create_directory(dir);
+  }
+
+  bool Utils::createFile(const std::filesystem::path& file)
+  {
+    std::ofstream f{ file };
+    f << "";
+    return true;
+  }
+
+  bool Utils::removeFile(const std::filesystem::path& file)
+  {
+    return std::filesystem::remove(file);
   }
 } // namespace fs

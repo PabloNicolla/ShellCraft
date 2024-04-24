@@ -19,5 +19,6 @@ namespace fs
     [[nodiscard]] const std::unordered_map<std::string, std::unique_ptr<SystemObject>>& getChildren() const;
     [[nodiscard]] SystemObject* searchChildren(const std::string& key);
     [[nodiscard]] bool addChildren(std::unique_ptr<SystemObject> so);
+    void removeChild(const std::string& key);
   };
 } // namespace fs

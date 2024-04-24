@@ -122,10 +122,24 @@ namespace shell
     [[nodiscard]] bool validateTokens(const Tokenizer& tokenizer);
   };
 
-  class CommandTouch final : public Command
+  class CommandRmdir final : public Command
   {
     fs::Directory* m_pDirectory{};
     std::string m_dirName{};
+
+  public:
+    CommandRmdir() = default;
+    [[nodiscard]] ShellFlag execute(const Tokenizer& tokenizer) override;
+    [[nodiscard]] ShellFlag help() override;
+    [[nodiscard]] std::vector<ResourceTypes> requiredResources() override;
+    [[nodiscard]] static std::unique_ptr<Command> factory();
+    [[nodiscard]] bool validateTokens(const Tokenizer& tokenizer);
+  };
+
+  class CommandTouch final : public Command
+  {
+    fs::Directory* m_pDirectory{};
+    std::string m_fileName{};
 
   public:
     CommandTouch() = default;
@@ -143,6 +157,34 @@ namespace shell
 
   public:
     CommandEcho() = default;
+    [[nodiscard]] ShellFlag execute(const Tokenizer& tokenizer) override;
+    [[nodiscard]] ShellFlag help() override;
+    [[nodiscard]] std::vector<ResourceTypes> requiredResources() override;
+    [[nodiscard]] static std::unique_ptr<Command> factory();
+    [[nodiscard]] bool validateTokens(const Tokenizer& tokenizer);
+  };
+
+  class CommandRm final : public Command
+  {
+    fs::Directory* m_pDirectory{};
+    std::string m_dirName{};
+
+  public:
+    CommandRm() = default;
+    [[nodiscard]] ShellFlag execute(const Tokenizer& tokenizer) override;
+    [[nodiscard]] ShellFlag help() override;
+    [[nodiscard]] std::vector<ResourceTypes> requiredResources() override;
+    [[nodiscard]] static std::unique_ptr<Command> factory();
+    [[nodiscard]] bool validateTokens(const Tokenizer& tokenizer);
+  };
+
+  class CommandHelp final : public Command
+  {
+    fs::Directory* m_pDirectory{};
+    std::string m_dirName{};
+
+  public:
+    CommandHelp() = default;
     [[nodiscard]] ShellFlag execute(const Tokenizer& tokenizer) override;
     [[nodiscard]] ShellFlag help() override;
     [[nodiscard]] std::vector<ResourceTypes> requiredResources() override;
