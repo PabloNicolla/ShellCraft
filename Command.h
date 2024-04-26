@@ -15,6 +15,7 @@ namespace shell
     fs::Directory* m_root{};
     fs::Directory* m_workingDir{};
     fs::FileSystemEnv* m_env{};
+    const std::unordered_map<std::string, std::unique_ptr<Command>(*)()>* m_commands{};
 
   public:
     Command() = default;
@@ -25,15 +26,15 @@ namespace shell
     Command& operator=(Command&& other) noexcept;
 
     virtual ShellFlag execute(const Tokenizer& tokenizer) = 0;
-    virtual ShellFlag help() = 0;
+    virtual void help() const = 0;
     virtual std::vector<ResourceTypes> requiredResources() = 0;
     void setRoot(fs::Directory* root);
     void setWorkingDir(fs::Directory* workingDir);
     void setEnv(fs::FileSystemEnv* env);
+    void setCommands(const std::unordered_map<std::string, std::unique_ptr<Command>(*)()>* commands);
     [[nodiscard]] fs::Directory* getWorkingDir() const;
     [[nodiscard]] std::string& cmdPathResolution(std::string& path) const;
     [[nodiscard]] fs::Directory* ensureFoundDirectory(const Tokenizer& tokenizer) const;
-
     [[nodiscard]] fs::Directory* ensureFoundParentDir(const fs::PathResolver& pr) const;
     [[nodiscard]] fs::SystemObject* ensureFoundSysObj(const fs::PathResolver& pr) const; // TODO(p)
   };
@@ -44,7 +45,7 @@ namespace shell
   public:
     CommandExit() = default;
     [[nodiscard]] ShellFlag execute(const Tokenizer& tokenizer) override;
-    [[nodiscard]] ShellFlag help() override;
+    [[nodiscard]] void help() const override;
     [[nodiscard]] std::vector<ResourceTypes> requiredResources() override;
     [[nodiscard]] static std::unique_ptr<Command> factory();
     [[nodiscard]] bool validateTokens(const Tokenizer& tokenizer) const;
@@ -55,7 +56,7 @@ namespace shell
   public:
     CommandLogout() = default;
     [[nodiscard]] ShellFlag execute(const Tokenizer& tokenizer) override;
-    [[nodiscard]] ShellFlag help() override;
+    [[nodiscard]] void help() const override;
     [[nodiscard]] std::vector<ResourceTypes> requiredResources() override;
     [[nodiscard]] static std::unique_ptr<Command> factory();
     [[nodiscard]] bool validateTokens(const Tokenizer& tokenizer) const;
@@ -68,7 +69,7 @@ namespace shell
   public:
     CommandLs() = default;
     [[nodiscard]] ShellFlag execute(const Tokenizer& tokenizer) override;
-    [[nodiscard]] ShellFlag help() override;
+    [[nodiscard]] void help() const override;
     [[nodiscard]] std::vector<ResourceTypes> requiredResources() override;
     [[nodiscard]] static std::unique_ptr<Command> factory();
     [[nodiscard]] bool validateTokens(const Tokenizer& tokenizer);
@@ -81,7 +82,7 @@ namespace shell
   public:
     CommandCd() = default;
     [[nodiscard]] ShellFlag execute(const Tokenizer& tokenizer) override;
-    [[nodiscard]] ShellFlag help() override;
+    [[nodiscard]] void help() const override;
     [[nodiscard]] std::vector<ResourceTypes> requiredResources() override;
     [[nodiscard]] static std::unique_ptr<Command> factory();
     [[nodiscard]] bool validateTokens(const Tokenizer& tokenizer);
@@ -94,7 +95,7 @@ namespace shell
   public:
     CommandCat() = default;
     [[nodiscard]] ShellFlag execute(const Tokenizer& tokenizer) override;
-    [[nodiscard]] ShellFlag help() override;
+    [[nodiscard]] void help() const override;
     [[nodiscard]] std::vector<ResourceTypes> requiredResources() override;
     [[nodiscard]] static std::unique_ptr<Command> factory();
     [[nodiscard]] bool validateTokens(const Tokenizer& tokenizer);
@@ -105,7 +106,7 @@ namespace shell
   public:
     CommandClear() = default;
     [[nodiscard]] ShellFlag execute(const Tokenizer& tokenizer) override;
-    [[nodiscard]] ShellFlag help() override;
+    [[nodiscard]] void help() const override;
     [[nodiscard]] std::vector<ResourceTypes> requiredResources() override;
     [[nodiscard]] static std::unique_ptr<Command> factory();
     [[nodiscard]] bool validateTokens(const Tokenizer& tokenizer) const;
@@ -119,7 +120,7 @@ namespace shell
   public:
     CommandMkdir() = default;
     [[nodiscard]] ShellFlag execute(const Tokenizer& tokenizer) override;
-    [[nodiscard]] ShellFlag help() override;
+    [[nodiscard]] void help() const override;
     [[nodiscard]] std::vector<ResourceTypes> requiredResources() override;
     [[nodiscard]] static std::unique_ptr<Command> factory();
     [[nodiscard]] bool validateTokens(const Tokenizer& tokenizer);
@@ -133,7 +134,7 @@ namespace shell
   public:
     CommandRmdir() = default;
     [[nodiscard]] ShellFlag execute(const Tokenizer& tokenizer) override;
-    [[nodiscard]] ShellFlag help() override;
+    [[nodiscard]] void help() const override;
     [[nodiscard]] std::vector<ResourceTypes> requiredResources() override;
     [[nodiscard]] static std::unique_ptr<Command> factory();
     [[nodiscard]] bool validateTokens(const Tokenizer& tokenizer);
@@ -147,7 +148,7 @@ namespace shell
   public:
     CommandTouch() = default;
     [[nodiscard]] ShellFlag execute(const Tokenizer& tokenizer) override;
-    [[nodiscard]] ShellFlag help() override;
+    [[nodiscard]] void help() const override;
     [[nodiscard]] std::vector<ResourceTypes> requiredResources() override;
     [[nodiscard]] static std::unique_ptr<Command> factory();
     [[nodiscard]] bool validateTokens(const Tokenizer& tokenizer);
@@ -160,7 +161,7 @@ namespace shell
   public:
     CommandEcho() = default;
     [[nodiscard]] ShellFlag execute(const Tokenizer& tokenizer) override;
-    [[nodiscard]] ShellFlag help() override;
+    [[nodiscard]] void help() const override;
     [[nodiscard]] std::vector<ResourceTypes> requiredResources() override;
     [[nodiscard]] static std::unique_ptr<Command> factory();
     [[nodiscard]] bool validateTokens(const Tokenizer& tokenizer);
@@ -174,7 +175,7 @@ namespace shell
   public:
     CommandRm() = default;
     [[nodiscard]] ShellFlag execute(const Tokenizer& tokenizer) override;
-    [[nodiscard]] ShellFlag help() override;
+    [[nodiscard]] void help() const override;
     [[nodiscard]] std::vector<ResourceTypes> requiredResources() override;
     [[nodiscard]] static std::unique_ptr<Command> factory();
     [[nodiscard]] bool validateTokens(const Tokenizer& tokenizer);
@@ -182,15 +183,12 @@ namespace shell
 
   class CommandHelp final : public Command
   {
-    fs::Directory* m_pDirectory{};
-    std::string m_dirName{};
-
   public:
     CommandHelp() = default;
     [[nodiscard]] ShellFlag execute(const Tokenizer& tokenizer) override;
-    [[nodiscard]] ShellFlag help() override;
+    [[nodiscard]] void help() const override;
     [[nodiscard]] std::vector<ResourceTypes> requiredResources() override;
     [[nodiscard]] static std::unique_ptr<Command> factory();
-    [[nodiscard]] bool validateTokens(const Tokenizer& tokenizer);
+    [[nodiscard]] bool validateTokens(const Tokenizer& tokenizer) const;
   };
 } // namespace shell

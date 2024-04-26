@@ -18,6 +18,7 @@ namespace shell
     m_commands["touch"] = CommandTouch::factory;
     m_commands["echo"] = CommandEcho::factory;
     m_commands["cat"] = CommandCat::factory;
+    m_commands["help"] = CommandHelp::factory;
   }
 
   fs::AppState CommandProcessor::run()
@@ -83,6 +84,10 @@ namespace shell
       else if (requiredResource == ResourceTypes::env)
       {
         cmd->setEnv(m_fileSystemManager->getMainEnv());
+      }
+      else if (requiredResource == ResourceTypes::additionalCmd)
+      {
+        cmd->setCommands(&m_commands);
       }
     }
   }

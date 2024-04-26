@@ -1,6 +1,5 @@
 #include <iostream>
 #include "Command.h"
-
 #include "CommandTokens.h"
 #include "File.h"
 #include "PathResolver.h"
@@ -12,6 +11,11 @@ namespace shell
   void Command::setEnv(fs::FileSystemEnv* env)
   {
     m_env = env;
+  }
+
+  void Command::setCommands(const std::unordered_map<std::string, std::unique_ptr<Command>(*)()>* const commands)
+  {
+    m_commands = commands;
   }
 
   std::string& Command::cmdPathResolution(std::string& path) const
@@ -132,10 +136,9 @@ namespace shell
     return ShellFlag::exit;
   }
 
-  ShellFlag CommandExit::help()
+  void CommandExit::help() const
   {
     std::cout << "exit - will shut down the app\n";
-    return ShellFlag::run;
   }
 
   std::vector<ResourceTypes> CommandExit::requiredResources()
@@ -176,9 +179,9 @@ namespace shell
     return ShellFlag::logout;
   }
 
-  ShellFlag CommandLogout::help()
+  void CommandLogout::help() const
   {
-    return ShellFlag::run;
+    std::cout << "logout - will log user out and send to initial menu\n";
   }
 
   std::vector<ResourceTypes> CommandLogout::requiredResources()
@@ -223,10 +226,9 @@ namespace shell
     return ShellFlag::run;
   }
 
-  ShellFlag CommandLs::help()
+  void CommandLs::help() const
   {
     std::cout << "ls - print directory contents\n";
-    return ShellFlag::run;
   }
 
   std::vector<ResourceTypes> CommandLs::requiredResources()
@@ -275,10 +277,9 @@ namespace shell
     return ShellFlag::run;
   }
 
-  ShellFlag CommandCd::help()
+  void CommandCd::help() const
   {
     std::cout << "cd - change working directory\n";
-    return ShellFlag::run;
   }
 
   std::vector<ResourceTypes> CommandCd::requiredResources()
@@ -326,10 +327,9 @@ namespace shell
     return ShellFlag::run;
   }
 
-  ShellFlag CommandCat::help()
+  void CommandCat::help() const
   {
     std::cout << "cat - concatenate files and print on the standard output\n";
-    return ShellFlag::run;
   }
 
   std::vector<ResourceTypes> CommandCat::requiredResources()
@@ -380,10 +380,9 @@ namespace shell
     return ShellFlag::run;
   }
 
-  ShellFlag CommandClear::help()
+  void CommandClear::help() const
   {
     std::cout << "clear - clear the terminal\n";
-    return ShellFlag::run;
   }
 
   std::vector<ResourceTypes> CommandClear::requiredResources()
@@ -432,10 +431,9 @@ namespace shell
     return ShellFlag::run;
   }
 
-  ShellFlag CommandMkdir::help()
+  void CommandMkdir::help() const
   {
     std::cout << "mkdir - create a new directory\n";
-    return ShellFlag::run;
   }
 
   std::vector<ResourceTypes> CommandMkdir::requiredResources()
@@ -492,10 +490,9 @@ namespace shell
     return ShellFlag::run;
   }
 
-  ShellFlag CommandRmdir::help()
+  void CommandRmdir::help() const
   {
     std::cout << "rmdir - remove an empty directory\n";
-    return ShellFlag::run;
   }
 
   std::vector<ResourceTypes> CommandRmdir::requiredResources()
@@ -583,10 +580,9 @@ namespace shell
     return ShellFlag::run;
   }
 
-  ShellFlag CommandTouch::help()
+  void CommandTouch::help() const
   {
     std::cout << "touch - create file\n";
-    return ShellFlag::run;
   }
 
   std::vector<ResourceTypes> CommandTouch::requiredResources()
@@ -658,11 +654,10 @@ namespace shell
     return ShellFlag::run;
   }
 
-  ShellFlag CommandEcho::help()
+  void CommandEcho::help() const
   {
     std::cout << "echo - display a line of text\n"
       << "you can use echo with `>>` to send the line to a file\n";
-    return ShellFlag::run;
   }
 
   std::vector<ResourceTypes> CommandEcho::requiredResources()
@@ -700,5 +695,61 @@ namespace shell
     }
     std::cout << "Invalid arguments\n";
     return false;
+  }
+} // namespace shell
+
+// Help
+namespace shell
+{
+  ShellFlag CommandHelp::execute(const Tokenizer& tokenizer)
+  {
+    if (validateTokens(tokenizer))
+    {
+      if (tokenizer.getArguments().empty())
+      {
+        for (const auto& [k, v] : *m_commands)
+        {
+          std::cout << k << "\n";
+        }
+      }
+      else
+      {
+        m_commands->at(tokenizer.getArguments()[0])()->help();
+      }
+    }
+    return ShellFlag::run;
+  }
+
+  void CommandHelp::help() const
+  {
+    std::cout << "help - display additional information\n";
+  }
+
+  std::vector<ResourceTypes> CommandHelp::requiredResources()
+  {
+    return { ResourceTypes::additionalCmd };
+  }
+
+  std::unique_ptr<Command> CommandHelp::factory()
+  {
+    return std::make_unique<CommandHelp>();
+  }
+
+  bool CommandHelp::validateTokens(const Tokenizer& tokenizer) const
+  {
+    if (!CommandTokens::expectedQtyArguments(tokenizer, 0, 1))
+    {
+      std::cout << "Invalid arguments\n";
+      return false;
+    }
+    if (tokenizer.getArguments().size() == 1)
+    {
+      if (m_commands->find(tokenizer.getArguments()[0]) == m_commands->end())
+      {
+        std::cout << "argument is not valid\n";
+        return false;
+      }
+    }
+    return true;
   }
 } // namespace shell
