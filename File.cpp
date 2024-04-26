@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <filesystem>
 #include <iostream>
 
@@ -31,25 +32,32 @@ namespace fs
 
   void File::writeToFile(const std::string& content) const
   {
+    std::string parentPath = getParentPath().empty() ? "" : getParentPath() + '/';
+    adaptParentPath(parentPath);
     const std::filesystem::path path{
-      "./fs/home/" + (getParentPath().empty() ? "" : getParentPath() + '/') + getName()
+      "./fs/home/" + getOwner() + '/' + parentPath + getName()
     };
     std::fstream(path, std::ios::out | std::ios::trunc) << content << '\n';
   }
 
   void File::appendToFile(const std::string& content) const
   {
+    std::string parentPath = getParentPath().empty() ? "" : getParentPath() + '/';
+    adaptParentPath(parentPath);
     const std::filesystem::path path{
-      "./fs/home/" + (getParentPath().empty() ? "" : getParentPath() + '/') + getName()
+      "./fs/home/" + getOwner() + '/' + parentPath + getName()
     };
     std::fstream(path, std::ios::out | std::ios::app) << content << '\n';
   }
 
   void File::printFile() const
   {
+    std::string parentPath = getParentPath().empty() ? "" : getParentPath() + '/';
+    adaptParentPath(parentPath);
     const std::filesystem::path path{
-      "./fs/home/" + (getParentPath().empty() ? "" : getParentPath() + '/') + getName()
+      "./fs/home/" + getOwner() + '/' + parentPath + getName()
     };
+
     std::ifstream file{ path };
     std::string line;
     while (getline(file, line))
@@ -58,8 +66,31 @@ namespace fs
     }
   }
 
+  void File::cascadeDelete()
+  {
+    std::string parentPath = getParentPath().empty() ? "" : getParentPath() + '/';
+    adaptParentPath(parentPath);
+    const std::filesystem::path path{
+      "./fs/home/" + getOwner() + '/' + parentPath + getName()
+    };
+    std::filesystem::remove(path);
+  }
+
   size_t File::getSize() const
   {
     return 0;
+  }
+
+  std::string& File::adaptParentPath(std::string& parentPath)
+  {
+    replace_if(parentPath.begin(), parentPath.end(), [](const char c)
+    {
+      if (c == '/')
+      {
+        return true;
+      }
+      return false;
+    }, '_');
+    return parentPath;
   }
 } // namespace fs

@@ -18,6 +18,7 @@ namespace shell
     m_commands["touch"] = CommandTouch::factory;
     m_commands["echo"] = CommandEcho::factory;
     m_commands["cat"] = CommandCat::factory;
+    m_commands["rm"] = CommandRm::factory;
     m_commands["help"] = CommandHelp::factory;
   }
 
@@ -46,7 +47,9 @@ namespace shell
       auto cmd = findCommand(tokenizer);
       if (!cmd)
       {
-        std::cout << "Command not found\n\n";
+        std::cout << "Command not found\n"
+          << "type `help` for available commands\n"
+          << "type `help [command_name]` for additional information\n\n";
         continue;
       }
       provideResources(cmd.get());

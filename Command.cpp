@@ -42,8 +42,7 @@ namespace shell
   fs::Directory* Command::ensureFoundDirectory(const Tokenizer& tokenizer) const
   {
     std::string path = tokenizer.getArguments()[0];
-    const auto so = m_env->searchSystemObject(cmdPathResolution(path));
-    if (!so)
+    if (const auto so = m_env->searchSystemObject(cmdPathResolution(path)); !so)
     {
       std::cout << "path is invalid\n";
     }
@@ -69,19 +68,13 @@ namespace shell
     {
       parentPath.pop_back();
     }
-    const auto so = m_env->searchSystemObject(cmdPathResolution(parentPath));
-    if (!so)
-    {
-      std::cout << "path is invalid\n";
-    }
-    else if (so->getType() == fs::SystemObjectType::directory)
+
+    if (const auto so = m_env->searchSystemObject(cmdPathResolution(parentPath));
+      so && so->getType() == fs::SystemObjectType::directory)
     {
       return dynamic_cast<fs::Directory*>(so);
     }
-    else
-    {
-      std::cout << "path is invalid\n";
-    }
+    std::cout << "path is invalid\n";
     return nullptr;
   }
 
@@ -154,12 +147,12 @@ namespace shell
 
   bool CommandExit::validateTokens(const Tokenizer& tokenizer) const
   {
-    if (!CommandTokens::noArguments(tokenizer))
+    if (CommandTokens::hasArguments(tokenizer))
     {
       std::cout << "exit does not take arguments\n";
       return false;
     }
-    if (!CommandTokens::noFlags(tokenizer))
+    if (CommandTokens::hasFlags(tokenizer))
     {
       std::cout << "exit does not take flags\n";
       return false;
@@ -197,12 +190,12 @@ namespace shell
 
   bool CommandLogout::validateTokens(const Tokenizer& tokenizer) const
   {
-    if (!CommandTokens::noArguments(tokenizer))
+    if (CommandTokens::hasArguments(tokenizer))
     {
       std::cout << "logout does not take arguments\n";
       return false;
     }
-    if (!CommandTokens::noFlags(tokenizer))
+    if (CommandTokens::hasFlags(tokenizer))
     {
       std::cout << "logout does not take flags\n";
       return false;
@@ -249,6 +242,12 @@ namespace shell
       std::cout << "invalid number of arguments\n";
       return false;
     }
+    if (CommandTokens::hasFlags(tokenizer))
+    {
+      std::cout << "ls does not have any flags implemented\n";
+      return false;
+    }
+
     if (tokenizer.getArguments().empty())
     {
       m_target = m_workingDir;
@@ -300,6 +299,12 @@ namespace shell
       std::cout << "invalid number of arguments\n";
       return false;
     }
+    if (CommandTokens::hasFlags(tokenizer))
+    {
+      std::cout << "cd does not have any flags implemented\n";
+      return false;
+    }
+
     if (tokenizer.getArguments().empty())
     {
       m_target = m_workingDir;
@@ -350,6 +355,11 @@ namespace shell
       std::cout << "invalid number of arguments\n";
       return false;
     }
+    if (CommandTokens::hasFlags(tokenizer))
+    {
+      std::cout << "cat does not have any flags implemented\n";
+      return false;
+    }
 
     const fs::PathResolver pr{ tokenizer.getArguments()[0] };
     if (const auto so = ensureFoundSysObj(pr); !so)
@@ -398,13 +408,15 @@ namespace shell
 
   bool CommandClear::validateTokens(const Tokenizer& tokenizer) const
   {
-    if (!CommandTokens::noArguments(tokenizer))
+    if (CommandTokens::hasArguments(tokenizer))
     {
       std::cout << "clear does not take arguments\n";
+      return false;
     }
-    if (!CommandTokens::noFlags(tokenizer))
+    if (CommandTokens::hasFlags(tokenizer))
     {
       std::cout << "clear does not take flags\n";
+      return false;
     }
     return true;
   }
@@ -452,6 +464,11 @@ namespace shell
     if (!CommandTokens::expectedQtyArguments(tokenizer, 1, 1))
     {
       std::cout << "invalid number of arguments\n";
+      return false;
+    }
+    if (CommandTokens::hasFlags(tokenizer))
+    {
+      std::cout << "mkdir does not have any flags implemented\n";
       return false;
     }
 
@@ -513,6 +530,11 @@ namespace shell
       std::cout << "invalid number of arguments\n";
       return false;
     }
+    if (CommandTokens::hasFlags(tokenizer))
+    {
+      std::cout << "rmdir does not have any flags implemented\n";
+      return false;
+    }
 
     const fs::PathResolver pr{ tokenizer.getArguments()[0] };
     m_dirName = pr.getObjectName();
@@ -566,14 +588,7 @@ namespace shell
                                     ? ""
                                     : m_pDirectory->getParentPath() + "/") + m_pDirectory->getName();
         (void)m_pDirectory->addChildren(std::make_unique<fs::File>(m_env->getUser(), m_fileName, parentPath));
-        replace_if(parentPath.begin(), parentPath.end(), [](const char c)
-        {
-          if (c == '/')
-          {
-            return true;
-          }
-          return false;
-        }, '_');
+        fs::File::adaptParentPath(parentPath);
         (void)fs::Utils::createFile(
           "./fs/home/" + m_env->getUser()->getUsername() + "/" + parentPath + "_" + m_fileName);
       }
@@ -601,6 +616,11 @@ namespace shell
     if (!CommandTokens::expectedQtyArguments(tokenizer, 1, 1))
     {
       std::cout << "invalid number of arguments\n";
+      return false;
+    }
+    if (CommandTokens::hasFlags(tokenizer))
+    {
+      std::cout << "touch does not have any flags implemented\n";
       return false;
     }
 
@@ -673,6 +693,11 @@ namespace shell
 
   bool CommandEcho::validateTokens(const Tokenizer& tokenizer)
   {
+    if (CommandTokens::hasFlags(tokenizer))
+    {
+      std::cout << "echo command does not have any flags implemented\n";
+      return false;
+    }
     if (tokenizer.getArguments().size() <= 1)
     {
       return true;
@@ -696,6 +721,105 @@ namespace shell
     }
     std::cout << "Invalid arguments\n";
     return false;
+  }
+} // namespace shell
+
+// rm
+namespace shell
+{
+  ShellFlag CommandRm::execute(const Tokenizer& tokenizer)
+  {
+    if (validateTokens(tokenizer))
+    {
+      m_pDirectory->removeChild(m_sysObjName);
+    }
+    return ShellFlag::run;
+  }
+
+  void CommandRm::help() const
+  {
+    std::cout << "rm - deletes a file\n"
+      << "flags [ -r ]: deletes non-empty directories\n";
+  }
+
+  std::vector<ResourceTypes> CommandRm::requiredResources()
+  {
+    return { ResourceTypes::root, ResourceTypes::workingDir, ResourceTypes::env };
+  }
+
+  std::unique_ptr<Command> CommandRm::factory()
+  {
+    return std::make_unique<CommandRm>();
+  }
+
+  bool CommandRm::validateTokens(const Tokenizer& tokenizer)
+  {
+    if (!CommandTokens::expectedQtyArguments(tokenizer, 1, 1))
+    {
+      std::cout << "invalid number of arguments\n";
+      return false;
+    }
+    if (!CommandTokens::expectedQtyFlags(tokenizer, 0, 1))
+    {
+      std::cout << "invalid number of flags\n";
+      return false;
+    }
+
+    const fs::PathResolver pr{ tokenizer.getArguments()[0] };
+    const fs::SystemObject* target{};
+    m_sysObjName = pr.getObjectName();
+    m_pDirectory = m_workingDir;
+
+    if (!pr.getParentPath().empty())
+    {
+      m_pDirectory = ensureFoundParentDir(pr);
+      if (!m_pDirectory)
+      {
+        return false;
+      }
+    }
+    for (const auto& [k, v] : m_pDirectory->getChildren())
+    {
+      if (k == m_sysObjName)
+      {
+        target = v.get();
+        break;
+      }
+    }
+    if (!target)
+    {
+      std::cout << "invalid path\n";
+      return false;
+    }
+
+    if (!tokenizer.getFlags().empty())
+    {
+      const Flags flag = stringToFlag(tokenizer.getFlags()[0]);
+      if (flag == invalid)
+      {
+        std::cout << "invalid flag\n";
+        return false;
+      }
+      if (flag == r) m_objType = target->getType();
+    }
+    else
+    {
+      if (target->getType() != fs::SystemObjectType::file)
+      {
+        std::cout << "cannot delete directories\n"
+          << "use rm -r to delete directories\n";
+        return false;
+      }
+      m_objType = fs::SystemObjectType::file;
+    }
+    return true;
+  }
+
+  CommandRm::Flags CommandRm::stringToFlag(const std::string& str) const
+  {
+    Flags output = invalid;
+    if (str == "-r") { output = r; }
+    return output;
   }
 } // namespace shell
 
@@ -743,6 +867,12 @@ namespace shell
       std::cout << "Invalid arguments\n";
       return false;
     }
+    if (CommandTokens::hasFlags(tokenizer))
+    {
+      std::cout << "help command does not take flags\n";
+      return false;
+    }
+
     if (tokenizer.getArguments().size() == 1)
     {
       if (m_commands->find(tokenizer.getArguments()[0]) == m_commands->end())

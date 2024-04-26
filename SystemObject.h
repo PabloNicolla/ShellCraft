@@ -38,6 +38,7 @@ namespace fs
     void setCreated(std::time_t created);
     void setModified(std::time_t modified);
     void setPermissions(int permissions);
+    virtual void cascadeDelete() = 0;
 
     std::ofstream& saveToFile(std::ofstream& ofs) const;
     std::istringstream& readFromFile(std::istringstream& ifs);

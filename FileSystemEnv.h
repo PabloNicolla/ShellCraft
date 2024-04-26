@@ -13,7 +13,7 @@ namespace fs
     const User* m_user{};
     std::unique_ptr<Directory> m_root{};
     std::filesystem::path m_rootPath{};
-    static const char* m_usersHomePath;
+    static const char* const usersHomePath;
 
   public:
     explicit FileSystemEnv(const User* user);

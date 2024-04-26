@@ -20,5 +20,6 @@ namespace fs
     [[nodiscard]] SystemObject* searchChildren(const std::string& key);
     [[nodiscard]] bool addChildren(std::unique_ptr<SystemObject> so);
     void removeChild(const std::string& key);
+    void cascadeDelete() override;
   };
 } // namespace fs

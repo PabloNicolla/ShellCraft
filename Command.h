@@ -36,7 +36,7 @@ namespace shell
     [[nodiscard]] std::string& cmdPathResolution(std::string& path) const;
     [[nodiscard]] fs::Directory* ensureFoundDirectory(const Tokenizer& tokenizer) const;
     [[nodiscard]] fs::Directory* ensureFoundParentDir(const fs::PathResolver& pr) const;
-    [[nodiscard]] fs::SystemObject* ensureFoundSysObj(const fs::PathResolver& pr) const; // TODO(p)
+    [[nodiscard]] fs::SystemObject* ensureFoundSysObj(const fs::PathResolver& pr) const;
   };
 
 
@@ -170,15 +170,19 @@ namespace shell
   class CommandRm final : public Command
   {
     fs::Directory* m_pDirectory{};
-    std::string m_dirName{};
+    fs::SystemObjectType m_objType{};
+    std::string m_sysObjName{};
 
   public:
+    enum Flags { invalid = -1, r };
+
     CommandRm() = default;
     [[nodiscard]] ShellFlag execute(const Tokenizer& tokenizer) override;
     void help() const override;
     [[nodiscard]] std::vector<ResourceTypes> requiredResources() override;
     [[nodiscard]] static std::unique_ptr<Command> factory();
     [[nodiscard]] bool validateTokens(const Tokenizer& tokenizer);
+    [[nodiscard]] Flags stringToFlag(const std::string& str) const;
   };
 
   class CommandHelp final : public Command

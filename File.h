@@ -18,7 +18,9 @@ namespace fs
     void writeToFile(const std::string& content) const;
     void appendToFile(const std::string& content) const;
     void printFile() const;
+    void cascadeDelete() override;
     [[nodiscard]] const std::string& getContent() const;
     [[nodiscard]] size_t getSize() const override;
+    static std::string& adaptParentPath(std::string& parentPath);
   };
 } // namespace fs

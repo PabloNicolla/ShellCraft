@@ -47,6 +47,15 @@ namespace fs
 
   void Directory::removeChild(const std::string& key)
   {
+    m_children[key]->cascadeDelete();
     m_children.erase(key);
+  }
+
+  void Directory::cascadeDelete()
+  {
+    for (auto& [k, v] : m_children)
+    {
+      v->cascadeDelete();
+    }
   }
 } // namespace fs
