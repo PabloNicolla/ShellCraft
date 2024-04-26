@@ -3,6 +3,8 @@
 This project simulates a file system environment with permanent storage.
 Users can interact with the system using a simple shell implementation.
 
+![demonstration gif](Documentation/fs.gif)
+
 ## Dependencies
 
 There are no dependencies
