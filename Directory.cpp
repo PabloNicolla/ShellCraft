@@ -19,7 +19,7 @@ namespace fs
   size_t Directory::getSize() const
   {
     size_t sum{};
-    for (auto& [k, v] : m_children)
+    for (const auto& [k, v] : m_children)
     {
       sum += v->getSize();
     }

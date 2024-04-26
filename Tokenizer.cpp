@@ -68,7 +68,7 @@ namespace shell
 
     if (isBetweenQuotes)
     {
-      return false;
+      return false; // skipcq: CXX-C2015
     }
     return true;
   }

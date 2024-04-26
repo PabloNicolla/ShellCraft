@@ -201,7 +201,7 @@ namespace fs
         << "> ";
       if (auto line = Utils::getLine())
       {
-        password = Utils::trim(line.value());
+        password = Utils::trim(line.value()); // skipcq: CXX-A1004
         isValid = true;
       }
       else if (Utils::promptToExitLoop())
