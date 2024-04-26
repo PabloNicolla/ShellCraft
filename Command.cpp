@@ -314,29 +314,59 @@ namespace shell
   }
 } // namespace shell
 
-//// Cat
-//namespace shell
-//{
-//  ShellFlag CommandCat::execute(const Tokenizer& tokenizer)
-//  {
-//  }
-//
-//  ShellFlag CommandCat::help()
-//  {
-//  }
-//
-//  std::vector<ResourceTypes> CommandCat::requiredResources()
-//  {
-//  }
-//
-//  std::unique_ptr<Command> CommandCat::factory()
-//  {
-//  }
-//
-//  bool CommandCat::validateTokens(const Tokenizer& tokenizer) const
-//  {
-//  }
-//} // namespace shell
+// Cat
+namespace shell
+{
+  ShellFlag CommandCat::execute(const Tokenizer& tokenizer)
+  {
+    if (validateTokens(tokenizer))
+    {
+      m_fileTarget->printFile();
+    }
+    return ShellFlag::run;
+  }
+
+  ShellFlag CommandCat::help()
+  {
+    std::cout << "cat - concatenate files and print on the standard output\n";
+    return ShellFlag::run;
+  }
+
+  std::vector<ResourceTypes> CommandCat::requiredResources()
+  {
+    return { ResourceTypes::root, ResourceTypes::workingDir, ResourceTypes::env };
+  }
+
+  std::unique_ptr<Command> CommandCat::factory()
+  {
+    return std::make_unique<CommandCat>();
+  }
+
+  bool CommandCat::validateTokens(const Tokenizer& tokenizer)
+  {
+    if (!CommandTokens::expectedQtyArguments(tokenizer, 1, 1))
+    {
+      std::cout << "invalid number of arguments\n";
+      return false;
+    }
+
+    const fs::PathResolver pr{ tokenizer.getArguments()[0] };
+    if (const auto so = ensureFoundSysObj(pr); !so)
+    {
+      std::cout << "Invalid path\n";
+    }
+    else if (so->getType() != fs::SystemObjectType::file)
+    {
+      std::cout << "touch only works with file objects\n";
+    }
+    else
+    {
+      m_fileTarget = dynamic_cast<fs::File*>(so);
+      return true;
+    }
+    return false;
+  }
+} // namespace shell
 
 // clear
 namespace shell

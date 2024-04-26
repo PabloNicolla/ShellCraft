@@ -89,13 +89,15 @@ namespace shell
 
   class CommandCat final : public Command
   {
+    fs::File* m_fileTarget{};
+
   public:
     CommandCat() = default;
     [[nodiscard]] ShellFlag execute(const Tokenizer& tokenizer) override;
     [[nodiscard]] ShellFlag help() override;
     [[nodiscard]] std::vector<ResourceTypes> requiredResources() override;
     [[nodiscard]] static std::unique_ptr<Command> factory();
-    [[nodiscard]] bool validateTokens(const Tokenizer& tokenizer) const;
+    [[nodiscard]] bool validateTokens(const Tokenizer& tokenizer);
   };
 
   class CommandClear final : public Command

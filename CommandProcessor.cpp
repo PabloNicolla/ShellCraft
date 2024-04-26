@@ -17,6 +17,7 @@ namespace shell
     m_commands["rmdir"] = CommandRmdir::factory;
     m_commands["touch"] = CommandTouch::factory;
     m_commands["echo"] = CommandEcho::factory;
+    m_commands["cat"] = CommandCat::factory;
   }
 
   fs::AppState CommandProcessor::run()
