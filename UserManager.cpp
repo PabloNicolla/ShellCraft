@@ -73,11 +73,7 @@ namespace fs
   {
     const auto userIt = std::find_if(m_users.begin(), m_users.end(), [&](const User& user)
     {
-      if (user.getUsername() == username)
-      {
-        return true;
-      }
-      return false;
+      return user.getUsername() == username;
     });
 
     if (userIt == m_users.end())

@@ -85,11 +85,7 @@ namespace fs
   {
     replace_if(parentPath.begin(), parentPath.end(), [](const char c)
     {
-      if (c == '/')
-      {
-        return true;
-      }
-      return false;
+      return c == '/';
     }, '_');
     return parentPath;
   }

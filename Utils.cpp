@@ -82,11 +82,7 @@ namespace fs
     std::string buff;
     std::getline(std::cin, buff);
 
-    if (buff == "y" || buff == "Y")
-    {
-      return true;
-    }
-    return false;
+    return buff == "y" || buff == "Y";
   }
 
   bool Utils::checkIfDirectoryExists(const std::filesystem::path& dir)

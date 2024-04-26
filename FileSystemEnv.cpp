@@ -73,7 +73,7 @@ namespace fs
           sysObj = std::make_unique<File>(iss);
         }
 
-        if (auto parent = searchSystemObject(sysObj->getParentPath()); parent->getType() == SystemObjectType::directory)
+        if (auto* parent = searchSystemObject(sysObj->getParentPath()); parent->getType() == SystemObjectType::directory)
         {
           if (!dynamic_cast<Directory*>(parent)->addChildren(std::move(sysObj)))
           {
@@ -98,7 +98,7 @@ namespace fs
 
     while (!directories.empty())
     {
-      const auto dir = directories.front();
+      const auto* dir = directories.front();
       directories.pop();
       for (const auto& [key, val] : dir->getChildren())
       {
@@ -118,7 +118,7 @@ namespace fs
     Directory* currDir = m_root.get();
     for (const auto& dirName : pr.getParentPath())
     {
-      if (const auto sysObj = currDir->searchChildren(dirName);
+      if (auto* sysObj = currDir->searchChildren(dirName);
         sysObj && sysObj->getType() == SystemObjectType::directory)
       {
         currDir = dynamic_cast<Directory*>(sysObj);

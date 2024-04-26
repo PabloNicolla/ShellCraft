@@ -42,7 +42,7 @@ namespace shell
   fs::Directory* Command::ensureFoundDirectory(const Tokenizer& tokenizer) const
   {
     std::string path = tokenizer.getArguments()[0];
-    if (const auto so = m_env->searchSystemObject(cmdPathResolution(path)); !so)
+    if (auto* so = m_env->searchSystemObject(cmdPathResolution(path)); !so)
     {
       std::cout << "path is invalid\n";
     }
@@ -69,7 +69,7 @@ namespace shell
       parentPath.pop_back();
     }
 
-    if (const auto so = m_env->searchSystemObject(cmdPathResolution(parentPath));
+    if (auto* so = m_env->searchSystemObject(cmdPathResolution(parentPath));
       so && so->getType() == fs::SystemObjectType::directory)
     {
       return dynamic_cast<fs::Directory*>(so);
@@ -362,7 +362,7 @@ namespace shell
     }
 
     const fs::PathResolver pr{ tokenizer.getArguments()[0] };
-    if (const auto so = ensureFoundSysObj(pr); !so)
+    if (auto* so = ensureFoundSysObj(pr); !so)
     {
       std::cout << "Invalid path\n";
     }
@@ -705,7 +705,7 @@ namespace shell
     if (tokenizer.getArguments().size() == 3 && tokenizer.getArguments()[1] == ">>")
     {
       const fs::PathResolver pr{ tokenizer.getArguments()[2] };
-      if (const auto so = ensureFoundSysObj(pr); !so)
+      if (auto* so = ensureFoundSysObj(pr); !so)
       {
         std::cout << "Invalid path\n";
       }
