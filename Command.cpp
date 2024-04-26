@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <iostream>
 #include "Command.h"
 #include "CommandTokens.h"
@@ -565,7 +566,7 @@ namespace shell
                                     ? ""
                                     : m_pDirectory->getParentPath() + "/") + m_pDirectory->getName();
         (void)m_pDirectory->addChildren(std::make_unique<fs::File>(m_env->getUser(), m_fileName, parentPath));
-        std::replace_if(parentPath.begin(), parentPath.end(), [](const char c)
+        replace_if(parentPath.begin(), parentPath.end(), [](const char c)
         {
           if (c == '/')
           {
