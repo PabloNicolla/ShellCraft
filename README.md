@@ -1,7 +1,7 @@
 # File System
 
 This project simulates a file system environment with permanent storage.
-The system can be interacted from the terminal from a simple shell implementation.
+Users can interact with the system using a simple shell implementation.
 
 ## Dependencies
 
@@ -20,6 +20,7 @@ There are no dependencies
 - echo
 - cat
 - help
+- rm
 
 ## Documentation
 
