@@ -520,6 +520,7 @@ namespace shell
   }
 } // namespace shell
 
+// touch
 namespace shell
 {
   ShellFlag CommandTouch::execute(const Tokenizer& tokenizer)
@@ -545,7 +546,8 @@ namespace shell
           }
           return false;
         }, '_');
-        (void)fs::Utils::createFile("./fs/home/" + m_env->getUser()->getUsername() + "/" + parentPath + "_" + m_fileName);
+        (void)fs::Utils::createFile(
+          "./fs/home/" + m_env->getUser()->getUsername() + "/" + parentPath + "_" + m_fileName);
       }
     }
     return ShellFlag::run;
@@ -604,5 +606,69 @@ namespace shell
       }
     }
     return true;
+  }
+} // namespace shell
+
+// echo
+namespace shell
+{
+  ShellFlag CommandEcho::execute(const Tokenizer& tokenizer)
+  {
+    if (validateTokens(tokenizer))
+    {
+      if (m_fileTarget)
+      {
+        m_fileTarget->appendToFile(tokenizer.getArguments()[0]);
+      }
+      else
+      {
+        std::cout << (tokenizer.getArguments().empty() ? "" : tokenizer.getArguments()[0]) << "\n";
+      }
+    }
+    return ShellFlag::run;
+  }
+
+  ShellFlag CommandEcho::help()
+  {
+    std::cout << "echo - display a line of text\n"
+      << "you can use echo with `>>` to send the line to a file\n";
+    return ShellFlag::run;
+  }
+
+  std::vector<ResourceTypes> CommandEcho::requiredResources()
+  {
+    return { ResourceTypes::root, ResourceTypes::workingDir, ResourceTypes::env };
+  }
+
+  std::unique_ptr<Command> CommandEcho::factory()
+  {
+    return std::make_unique<CommandEcho>();
+  }
+
+  bool CommandEcho::validateTokens(const Tokenizer& tokenizer)
+  {
+    if (tokenizer.getArguments().size() <= 1)
+    {
+      return true;
+    }
+    if (tokenizer.getArguments().size() == 3 && tokenizer.getArguments()[1] == ">>")
+    {
+      const fs::PathResolver pr{ tokenizer.getArguments()[2] };
+      if (const auto so = ensureFoundSysObj(pr); !so)
+      {
+        std::cout << "Invalid path\n";
+      }
+      else if (so->getType() != fs::SystemObjectType::file)
+      {
+        std::cout << "touch can only redirect to file objects\n";
+      }
+      else
+      {
+        m_fileTarget = dynamic_cast<fs::File*>(so);
+        return true;
+      }
+    }
+    std::cout << "Invalid arguments\n";
+    return false;
   }
 } // namespace shell

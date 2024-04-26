@@ -8,8 +8,6 @@ namespace fs
 {
   enum Action { authenticate, registerUser, exit };
 
-  [[nodiscard]] int getAction();
-
   void FileSystemManager::run()
   {
     auto currentAppState = AppState::running;
@@ -67,7 +65,7 @@ namespace fs
     return state;
   }
 
-  [[nodiscard]] int getAction()
+  [[nodiscard]] int FileSystemManager::getAction()
   {
     int choice{ -1 };
     bool isValid{ false };

@@ -15,6 +15,8 @@ namespace fs
     explicit File(std::istringstream& ifs);
 
     void setContent(const std::string& content);
+    void writeToFile(const std::string& content) const;
+    void appendToFile(const std::string& content) const;
     [[nodiscard]] const std::string& getContent() const;
     [[nodiscard]] size_t getSize() const override;
   };

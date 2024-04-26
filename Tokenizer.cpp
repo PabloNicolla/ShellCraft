@@ -60,6 +60,7 @@ namespace shell
         isReadingToken = true;
         if (tLine[i] == '"')
         {
+          ++tokenStart;
           isBetweenQuotes = true;
         }
       }

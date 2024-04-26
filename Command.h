@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include "Directory.h"
+#include "File.h"
 #include "FileSystemEnv.h"
 #include "Flags.h"
 #include "PathResolver.h"
@@ -152,8 +153,7 @@ namespace shell
 
   class CommandEcho final : public Command
   {
-    fs::Directory* m_pDirectory{};
-    std::string m_dirName{};
+    fs::File* m_fileTarget{};
 
   public:
     CommandEcho() = default;

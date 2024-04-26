@@ -21,5 +21,6 @@ namespace fs
   private:
     AppState startFileSystem();
     void static createEssentialFiles();
+    [[nodiscard]] int static getAction();
   };
 } // namespace fs

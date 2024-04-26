@@ -30,12 +30,14 @@ namespace fs
   {
     m_root = std::move(other.m_root);
     m_user = other.m_user;
+    other.m_user = nullptr;
   }
 
   FileSystemEnv& FileSystemEnv::operator=(FileSystemEnv&& other) noexcept
   {
     m_root = std::move(other.m_root);
     m_user = other.m_user;
+    other.m_user = nullptr;
     return *this;
   }
 
@@ -71,8 +73,7 @@ namespace fs
           sysObj = std::make_unique<File>(iss);
         }
 
-        auto parent = searchSystemObject(sysObj->getParentPath());
-        if (parent->getType() == SystemObjectType::directory)
+        if (auto parent = searchSystemObject(sysObj->getParentPath()); parent->getType() == SystemObjectType::directory)
         {
           if (!dynamic_cast<Directory*>(parent)->addChildren(std::move(sysObj)))
           {
