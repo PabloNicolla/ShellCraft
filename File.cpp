@@ -78,7 +78,12 @@ namespace fs
 
   size_t File::getSize() const
   {
-    return 0;
+    std::string parentPath = getParentPath().empty() ? "" : getParentPath() + '/';
+    adaptParentPath(parentPath);
+    const std::filesystem::path path{
+      "./fs/home/" + getOwner() + '/' + parentPath + getName()
+    };
+    return std::filesystem::file_size(path);
   }
 
   std::string& File::adaptParentPath(std::string& parentPath)

@@ -54,11 +54,6 @@ namespace fs
     m_parentPath = parentPath;
   }
 
-  size_t SystemObject::getSize() const
-  {
-    return m_size;
-  }
-
   int SystemObject::getPermissions() const
   {
     return m_permissions;
@@ -87,7 +82,7 @@ namespace fs
       << m_created << "|"
       << m_modified << "|"
       << m_parentPath << "|"
-      << m_size << "|"
+      << getSize() << "|"
       << m_permissions;
     return ofs;
   }

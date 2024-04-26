@@ -18,7 +18,12 @@ namespace fs
 
   size_t Directory::getSize() const
   {
-    return 1;
+    size_t sum{};
+    for (auto& [k, v] : m_children)
+    {
+      sum += v->getSize();
+    }
+    return sum;
   }
 
   const std::unordered_map<std::string, std::unique_ptr<SystemObject>>& Directory::getChildren() const
