@@ -9,6 +9,20 @@ Users can interact with the system using a simple shell implementation.
 
 There are no dependencies
 
+## Run it with docker
+
+### docker build
+
+```
+docker build -t fylesystem:latest .
+```
+
+### docker run
+
+```
+docker run -it fylesystem:latest
+```
+
 ## Shell Commands
 
 - exit
